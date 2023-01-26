@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "158895990793",
+    "project_id": "gesvol-6a1b7",
+    "storage_bucket": "gesvol-6a1b7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:158895990793:android:35f6cba9a0e3e9a69830d8",
+        "android_client_info": {
+          "package_name": "com.example.gesvol"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "158895990793-ot2j8vk0ql90emnc6eiur2a0cgb5rm8k.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDMeJv7jf64eQGUpZNJnrijAvxrqDRAd6Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "158895990793-ot2j8vk0ql90emnc6eiur2a0cgb5rm8k.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

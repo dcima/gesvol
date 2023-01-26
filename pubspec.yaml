@@ -12,8 +12,11 @@ dependencies:
   flutter_localizations:
     sdk: flutter
 
-  intl: ^0.17.0
   cupertino_icons: ^1.0.2
+  firebase_analytics: ^10.1.0
+  firebase_auth: ^4.2.5
+  firebase_core: ^2.4.1
+  intl: ^0.17.0
   mysql_utils: ^2.1.1
 
 dev_dependencies:

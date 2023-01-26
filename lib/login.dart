@@ -1,8 +1,10 @@
 // ignore_for_file: library_private_types_in_public_api
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:gesvol/dashboard.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:gesvol/dashboard.dart';
+import 'package:gesvol/helper.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -23,7 +25,8 @@ class _LoginState extends State<Login> {
   bool _isObscure  = true;
 
   TextEditingController userInput = TextEditingController();
-  String text = "";
+  String email = "";
+  String password = "";
 
   @override
   void dispose() {
@@ -49,12 +52,13 @@ class _LoginState extends State<Login> {
         child:TextFormField(
           autofocus: true,
           controller: userInput,
-          textInputAction: TextInputAction.next,
+          //textInputAction: TextInputAction.next,
           validator: (value) {
             if (value == null || value.isEmpty) {
               return 'Email dominio gevbologna.org obbligatoria';
             } else if( emailOk.hasMatch(value))  {
-              FocusScope.of(context).requestFocus(passwdFN);
+              email = value.toString();
+              //FocusScope.of(context).requestFocus(passwdFN);
               return null;
             } else {
                 return 'Email nel formato: nome.cognome@gevbologna.org';
@@ -110,7 +114,8 @@ class _LoginState extends State<Login> {
           if (value == null || value.isEmpty) {
             return 'Password obbligatoria';
           } else if( passwdOk.hasMatch(value))  {
-            FocusScope.of(context).requestFocus(loginBtnFN);
+            password = value.toString();
+            //FocusScope.of(context).requestFocus(loginBtnFN);
             return null;
           } else {
             return 'Password non valida. Caratteri ammessi: "[a-zA-Z0-9_.!\$%&@?*,;.:]" e lunghezza da 1 a 16';
@@ -118,6 +123,10 @@ class _LoginState extends State<Login> {
         },
         decoration: InputDecoration(
             labelText: 'Password',
+            prefixIcon: const Icon(
+              Icons.lock,
+              color: Colors.grey,
+            ),
             suffixIcon: IconButton(
                 icon: Icon(
                     _isObscure ? Icons.visibility : Icons.visibility_off),
@@ -154,18 +163,25 @@ class _LoginState extends State<Login> {
       decoration: BoxDecoration(
           color: Colors.blue, borderRadius: BorderRadius.circular(20)),
       child: TextButton(
-        onPressed: () {
+        onPressed: () async {
           if (!_formKey.currentState!.validate()) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Controlla i campi!'),
-                backgroundColor: (Colors.red),
-              ),
-            );
-            FocusScope.of(context).requestFocus(emailFN);
+            Helper.snackMsg(context, 'Controlla i campi!');
           } else {
-            Navigator.push(
-                context, MaterialPageRoute(builder: (_) => const Dashboard()));
+            try {
+              final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+                  email: email,
+                  password: password,
+              );
+              Navigator.push(context, MaterialPageRoute(builder: (_) => const Dashboard()));
+            } on FirebaseAuthException catch (e) {
+              if (e.code == 'user-not-found') {
+                Helper.snackMsg(context, 'No user found for that email');
+              } else if (e.code == 'wrong-password') {
+                Helper.snackMsg(context, 'Wrong password provided for that user.');
+              }
+            }
+
+
           }
         },
         child: const Text(

@@ -1,3 +1,8 @@
 {
-    "loginPage": "Login Page"
+    "@@locale": "en",
+    "appTitle": "CPGEV Secretariat",
+    "loginPage": "Login Page",
+    "pressBelowButton" : "Press the button below to authenticate",
+    "signInWithGoogle": "Sign in with Google",
+    "welcomeLogin": "Welcome to the CPGEV secretariat applications"
 }

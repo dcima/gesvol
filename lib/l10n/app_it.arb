@@ -1,3 +1,8 @@
 {
-    "loginPage": "Pagina iniziale"
+    "@@locale": "it",
+    "appTitle": "Segreteria CPGEV",
+    "loginPage": "Pagina iniziale",
+    "pressBelowButton" : "Premere il pulsante in basso per autenticarsi",
+    "signInWithGoogle": "Accedi con Google",
+    "welcomeLogin": "Benvenuti nelle applicazioni della segreteria CPGEV"
 }

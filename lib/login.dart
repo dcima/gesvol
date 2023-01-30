@@ -1,10 +1,24 @@
 // ignore_for_file: library_private_types_in_public_api
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:gesvol/dashboard.dart';
 import 'package:gesvol/helper.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+
+GoogleSignIn _googleSignIn = GoogleSignIn(
+  // Optional clientId
+  clientId: '158895990793-4lseu4mff4bcnaeja3oiod850incvno3.apps.googleusercontent.com',
+  hostedDomain: 'gevbologna.org',
+  scopes: <String>[
+    'https://www.googleapis.com/auth/userinfo.email',
+    'https://www.googleapis.com/auth/userinfo.profile',
+    'openid',
+    'https://www.googleapis.com/auth/contacts.readonly',
+  ],
+);
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -14,25 +28,32 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  final _formKey = GlobalKey<FormState>();
-  final emailOk = RegExp(r'^[a-zA-Z0-9_.]+@gevbologna.org+$');
-  final passwdOk = RegExp(r'^[a-zA-Z0-9_.!$%&@?*,;.:]{1,16}$');
-  FocusNode emailFN = FocusNode();
-  FocusNode passwdFN = FocusNode();
-  FocusNode loginBtnFN = FocusNode();
-
-  // Initially password is obscure
-  bool _isObscure  = true;
-
-  TextEditingController userInput = TextEditingController();
-  String email = "";
-  String password = "";
+  GoogleSignInAccount? _currentUser;
 
   @override
-  void dispose() {
-    userInput.dispose();
-    super.dispose();
+  void initState() {
+    print("initState");
+
+    super.initState();
+    _googleSignIn.onCurrentUserChanged.listen((GoogleSignInAccount? account) {
+      setState(() {
+        Helper.currentUser = account;
+      });
+    });
   }
+
+  Future<void> _handleSignIn(context) async {
+    print("_handleSignIn");
+
+    try {
+      await _googleSignIn.signIn();
+      Navigator.push(context, MaterialPageRoute(builder: (_) => const Dashboard()));
+    } catch (error) {
+      print(error);
+    }
+  }
+
+  Future<void> _handleSignOut() => _googleSignIn.disconnect();
 
   Widget buildLogo(BuildContext context) {
     return Padding(
@@ -46,148 +67,48 @@ class _LoginState extends State<Login> {
     );
   }
 
-  Widget buildEmailField(BuildContext context) {
+  Widget welcomeLogin(BuildContext context) {
     return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 15),
-        child:TextFormField(
-          autofocus: true,
-          controller: userInput,
-          //textInputAction: TextInputAction.next,
-          validator: (value) {
-            if (value == null || value.isEmpty) {
-              return 'Email dominio gevbologna.org obbligatoria';
-            } else if( emailOk.hasMatch(value))  {
-              email = value.toString();
-              //FocusScope.of(context).requestFocus(passwdFN);
-              return null;
-            } else {
-                return 'Email nel formato: nome.cognome@gevbologna.org';
-            }
-          },
-          style: const TextStyle(
-            fontSize: 18,
-            color: Colors.black,
-            fontWeight: FontWeight.w600,
+      padding: EdgeInsets.only(top: 40.0, left: 8.0, right: 8.0),
+      child: Column(
+        children: [
+          Text(
+              AppLocalizations.of(context)!.welcomeLogin,
+              style: GoogleFonts.montserrat(
+                  textStyle: TextStyle(
+                    color: Colors.grey[800],
+                    fontWeight: FontWeight.bold,
+                    fontSize: 24,
+                ),
+              ),
           ),
-          decoration: InputDecoration(
-            focusColor: Colors.white,
-            prefixIcon: const Icon(
-              Icons.email,
-              color: Colors.grey,
-            ),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderSide:
-              const BorderSide(color: Colors.blue, width: 1.0),
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            fillColor: Colors.grey,
-            hintText: "Es. nome.cognome@gevbologna.org",
-            hintStyle: const TextStyle(
-              color: Colors.grey,
-              fontSize: 16,
-              fontFamily: "verdana_regular",
-              fontWeight: FontWeight.w400,
-            ),
-            labelText: 'Email',
-            labelStyle: const TextStyle(
-              color: Colors.grey,
-              fontSize: 16,
-              fontFamily: "verdana_regular",
-              fontWeight: FontWeight.w400,
+          Padding(
+            padding: const EdgeInsets.only(top: 40.0),
+            child: Text(
+              AppLocalizations.of(context)!.pressBelowButton,
+              style: GoogleFonts.abel(
+                textStyle: TextStyle(
+                  color: Colors.deepOrange,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
+              )
             ),
           ),
-        ),
-    );
-  }
-
-  Widget buildPasswordField(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 15.0, right: 15.0, top: 15, bottom: 0),
-      //padding: EdgeInsets.symmetric(horizontal: 15),
-      child: TextFormField(
-        obscureText: _isObscure,
-        //textInputAction: TextInputAction.next,
-        validator: (value) {
-          if (value == null || value.isEmpty) {
-            return 'Password obbligatoria';
-          } else if( passwdOk.hasMatch(value))  {
-            password = value.toString();
-            //FocusScope.of(context).requestFocus(loginBtnFN);
-            return null;
-          } else {
-            return 'Password non valida. Caratteri ammessi: "[a-zA-Z0-9_.!\$%&@?*,;.:]" e lunghezza da 1 a 16';
-          }
-        },
-        decoration: InputDecoration(
-            labelText: 'Password',
-            prefixIcon: const Icon(
-              Icons.lock,
-              color: Colors.grey,
-            ),
-            suffixIcon: IconButton(
-                icon: Icon(
-                    _isObscure ? Icons.visibility : Icons.visibility_off),
-                onPressed: () {
-                  setState(() {
-                    _isObscure = !_isObscure;
-                  });
-                },
-            ),
-        ),
-      ),
-    );
-  }
-
-  Widget buildForgotPasswordButton(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: TextButton(
-        onPressed: (){
-          //TODO FORGOT PASSWORD SCREEN GOES HERE
-        },
-        child: const Text(
-          'Forgot Password',
-          style: TextStyle(color: Colors.blue, fontSize: 15),
-        ),
+        ],
       ),
     );
   }
 
   Widget buildLoginButton(BuildContext context) {
-    return Container(
-      height: 50,
-      width: 250,
-      decoration: BoxDecoration(
-          color: Colors.blue, borderRadius: BorderRadius.circular(20)),
-      child: TextButton(
-        onPressed: () async {
-          if (!_formKey.currentState!.validate()) {
-            Helper.snackMsg(context, 'Controlla i campi!');
-          } else {
-            try {
-              final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
-                  email: email,
-                  password: password,
-              );
-              Navigator.push(context, MaterialPageRoute(builder: (_) => const Dashboard()));
-            } on FirebaseAuthException catch (e) {
-              if (e.code == 'user-not-found') {
-                Helper.snackMsg(context, 'No user found for that email');
-              } else if (e.code == 'wrong-password') {
-                Helper.snackMsg(context, 'Wrong password provided for that user.');
-              }
-            }
-
-
-          }
+    return Padding(
+      padding: EdgeInsets.only(top: 40.0),
+      child: SignInButton(
+        Buttons.Google,
+        text: AppLocalizations.of(context)!.signInWithGoogle,
+        onPressed: () {
+          _handleSignIn(context);
         },
-        child: const Text(
-          'Login',
-          style: TextStyle(color: Colors.white, fontSize: 25),
-        ),
       ),
     );
   }
@@ -197,13 +118,11 @@ class _LoginState extends State<Login> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context).loginPage),
+        title: Text(AppLocalizations.of(context)!.loginPage),
       ),
       body: SingleChildScrollView(
         child: Center(
           child: Form(
-            key: _formKey,
-            autovalidateMode: AutovalidateMode.always,
             child: Container(
               width: 380,
               height: 520,
@@ -224,15 +143,8 @@ class _LoginState extends State<Login> {
               child: Column(
                 children: <Widget>[
                   buildLogo(context),
-                  buildEmailField(context),
-                  buildPasswordField(context),
-                  buildForgotPasswordButton(context),
+                  welcomeLogin(context),
                   buildLoginButton(context),
-
-                  const SizedBox(
-                    height: 40,
-                  ),
-                  const Text('New User? Create Account')
                 ],
               ),
             ),

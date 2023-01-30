@@ -12,45 +12,53 @@ class Dashboard extends StatefulWidget {
 
 class _DashboardState extends State<Dashboard> {
   Widget getDrawer() {
-    print(Helper.currentUser?.displayName);
-    print(Helper.currentUser?.displayName);
-    print(Helper.currentUser?.id);
-    print(Helper.currentUser?.photoUrl);
-    print(Helper.currentUser?.serverAuthCode);
-
-    return Drawer(
-      child: ListView(
-        padding: EdgeInsets.zero,
-        children: [
-          DrawerHeader(
-            decoration: BoxDecoration(
-              color: Colors.blue,
-            ),
-            child: ListView(
-              children: [
-                UserAccountsDrawerHeader(
-                    accountName: Text(Helper.currentUser!.displayName!),
-                    accountEmail: Text(Helper.currentUser!.email!),
+    return  Drawer(
+        child: ListView(
+          children:   [
+            UserAccountsDrawerHeader(
+              accountName: Text(Helper.currentUser!.displayName!),
+              accountEmail: Text(Helper.currentUser!.email!),
+              currentAccountPicture: CircleAvatar(
+                  radius: 30.0,
+                  backgroundImage: NetworkImage(Helper.currentUser!.photoUrl!.replaceAll("s96-c", "s192-c")),
+                  backgroundColor: Colors.transparent,
+              ),
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: NetworkImage("https://archive.org/download/nav-menu-header-bg/nav-menu-header-bg.jpg"),
+                  fit: BoxFit.fill,
                 ),
-              ],
+              ),
+              /*otherAccountsPictures: [
+                CircleAvatar(
+                  backgroundColor: Colors.white,
+                  backgroundImage: NetworkImage("https://randomuser.me/api/portraits/women/74.jpg")),
+                CircleAvatar(
+                  backgroundColor: Colors.white,
+                  backgroundImage: NetworkImage("https://randomuser.me/api/portraits/men/47.jpg"),
+                ),
+              ],*/
             ),
-          ),
-          ListTile(
-            title: const Text('Item 1'),
-            onTap: () {
-              // Update the state of the app.
-              // ...
-              Navigator.pop(context);
-            },
-          ),
-          ListTile(
-            title: const Text('Item 2'),
-            onTap: () {
-              // Update the state of the app.
-              // ...
-              Navigator.pop(context);
-            },
-          ),
+            ListTile(
+              leading: Icon(Icons.home),
+              title: Text("Home"),
+              onTap: () {},
+            ),
+            ListTile(
+              leading: Icon(Icons.account_box),
+              title: Text("About"),
+              onTap: () {},
+            ),
+            ListTile(
+              leading: Icon(Icons.grid_3x3_outlined),
+              title: Text("Products"),
+            onTap: () {},
+            ),
+            ListTile(
+              leading: Icon(Icons.contact_mail),
+              title: Text("Contact"),
+              onTap: () {},
+            ),
         ],
       ),
     );

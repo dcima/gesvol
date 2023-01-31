@@ -1,6 +1,8 @@
 {
     "@@locale": "es",
     "appTitle": "Secretarìa CPGEV",
+    "drawerAbout": "Acerca de",
+    "drawerLogout": "Cerrar sesión",
     "loginPage": "Página de inicio",
     "pressBelowButton" : "Presione el botón de abajo para autenticarse",
     "signInWithGoogle": "Inicia sesión con Google",

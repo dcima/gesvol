@@ -18,12 +18,12 @@ dependencies:
   firebase_auth: ^4.2.5
   firebase_core: ^2.4.1
   flutter_signin_button: ^2.0.0
+  get: ^4.6.5
   google_fonts: ^4.0.1
   google_sign_in: ^5.4.4
   googleapis: ^10.0.0
   http: ^0.13.5
   intl: ^0.17.0
-  mysql_utils: ^2.1.1
 
 dev_dependencies:
   flutter_test:

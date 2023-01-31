@@ -32,19 +32,16 @@ class _LoginState extends State<Login> {
 
   @override
   void initState() {
-    print("initState");
-
     super.initState();
     _googleSignIn.onCurrentUserChanged.listen((GoogleSignInAccount? account) {
       setState(() {
         Helper.currentUser = account;
+        Helper.googleObj = _googleSignIn;
       });
     });
   }
 
   Future<void> _handleSignIn(context) async {
-    print("_handleSignIn");
-
     try {
       await _googleSignIn.signIn();
       Navigator.push(context, MaterialPageRoute(builder: (_) => const Dashboard()));
@@ -69,7 +66,7 @@ class _LoginState extends State<Login> {
 
   Widget welcomeLogin(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(top: 40.0, left: 8.0, right: 8.0),
+      padding: const EdgeInsets.only(top: 40.0, left: 8.0, right: 8.0),
       child: Column(
         children: [
           Text(
@@ -87,7 +84,7 @@ class _LoginState extends State<Login> {
             child: Text(
               AppLocalizations.of(context)!.pressBelowButton,
               style: GoogleFonts.abel(
-                textStyle: TextStyle(
+                textStyle: const TextStyle(
                   color: Colors.deepOrange,
                   fontWeight: FontWeight.bold,
                   fontSize: 16,
@@ -102,7 +99,7 @@ class _LoginState extends State<Login> {
 
   Widget buildLoginButton(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(top: 40.0),
+      padding: const EdgeInsets.only(top: 40.0),
       child: SignInButton(
         Buttons.Google,
         text: AppLocalizations.of(context)!.signInWithGoogle,

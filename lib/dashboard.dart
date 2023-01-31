@@ -1,6 +1,7 @@
 // ignore_for_file: library_private_types_in_public_api
 
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:gesvol/helper.dart';
 
 class Dashboard extends StatefulWidget {
@@ -23,7 +24,7 @@ class _DashboardState extends State<Dashboard> {
                   backgroundImage: NetworkImage(Helper.currentUser!.photoUrl!.replaceAll("s96-c", "s192-c")),
                   backgroundColor: Colors.transparent,
               ),
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 image: DecorationImage(
                   image: NetworkImage("https://archive.org/download/nav-menu-header-bg/nav-menu-header-bg.jpg"),
                   fit: BoxFit.fill,
@@ -40,24 +41,14 @@ class _DashboardState extends State<Dashboard> {
               ],*/
             ),
             ListTile(
-              leading: Icon(Icons.home),
-              title: Text("Home"),
+              leading: const Icon(Icons.home),
+              title: Text(AppLocalizations.of(context)!.loginPage),
               onTap: () {},
             ),
             ListTile(
-              leading: Icon(Icons.account_box),
-              title: Text("About"),
-              onTap: () {},
-            ),
-            ListTile(
-              leading: Icon(Icons.grid_3x3_outlined),
-              title: Text("Products"),
+              leading: Icon(Icons.logout),
+              title: Text(AppLocalizations.of(context)!.drawerLogout),
             onTap: () {},
-            ),
-            ListTile(
-              leading: Icon(Icons.contact_mail),
-              title: Text("Contact"),
-              onTap: () {},
             ),
         ],
       ),

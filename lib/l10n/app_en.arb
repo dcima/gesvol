@@ -1,6 +1,8 @@
 {
     "@@locale": "en",
     "appTitle": "CPGEV Secretariat",
+    "drawerAbout": "About",
+    "drawerLogout": "Logout",
     "loginPage": "Login Page",
     "pressBelowButton" : "Press the button below to authenticate",
     "signInWithGoogle": "Sign in with Google",

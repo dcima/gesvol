@@ -2,6 +2,7 @@
     "@@locale": "it",
     "appTitle": "Segreteria CPGEV",
     "drawerAbout": "A proposito",
+    "drawerListUsers": "Elenco utenti dominio",
     "drawerLogout": "Disconnettersi",
     "loginPage": "Pagina iniziale",
     "pressBelowButton" : "Premere il pulsante in basso per autenticarsi",

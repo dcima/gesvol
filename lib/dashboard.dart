@@ -1,28 +1,24 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:gesvol/helper.dart';
+import 'package:gesvol/login.dart';
 import 'package:gesvol/utils/authentication.dart';
-
-import 'login.dart';
+import 'package:googleapis/appengine/v1.dart';
 
 class Dashboard extends StatefulWidget {
-  const Dashboard({Key? key, required User user})
-      : _user = user,
-        super(key: key);
-
-  final User _user;
+  const Dashboard({super.key});
 
   @override
   _DashboardState createState() => _DashboardState();
 }
 
 class _DashboardState extends State<Dashboard> {
-  late User _user;
+  User? _user = Helper.userGoogle;
   bool _isSigningOut = false;
 
   @override
   void initState() {
-    _user = widget._user;
     super.initState();
   }
 
@@ -35,14 +31,11 @@ class _DashboardState extends State<Dashboard> {
               accountEmail: Text(_user!.email!),
               currentAccountPicture: CircleAvatar(
                   radius: 30.0,
-                  //backgroundImage: NetworkImage(Helper.currentUser!.photoUrl!.replaceAll("s96-c", "s192-c")),
-                  backgroundImage: NetworkImage(
-                      _user.photoURL!.isEmpty ?
-                      "https://as2.ftcdn.net/v2/jpg/04/81/46/87/1000_F_481468761_wL1IyJr5atPekfwhSK3dXtI1l6TOzw3T.jpg"
-                      :
-                      _user.photoURL!,
-                  ),
+                  backgroundImage: NetworkImage(_user!.photoURL!),
                   backgroundColor: Colors.transparent,
+                  onBackgroundImageError: (e, s) {
+                    debugPrint('image issue, $e,$s');
+                  },
               ),
               decoration: const BoxDecoration(
                 image: DecorationImage(
@@ -64,6 +57,13 @@ class _DashboardState extends State<Dashboard> {
               leading: const Icon(Icons.home),
               title: Text(AppLocalizations.of(context)!.loginPage),
               onTap: () {},
+            ),
+            ListTile(
+              leading: const Icon(Icons.domain),
+              title: Text(AppLocalizations.of(context)!.drawerListUsers),
+              onTap: () {
+                Navigator.pushNamed(context, '/list_domain_users');
+              },
             ),
             ListTile(
               leading: const Icon(Icons.logout),

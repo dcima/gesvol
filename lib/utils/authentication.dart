@@ -5,6 +5,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:gesvol/firebase_options.dart';
+import 'package:gesvol/helper.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class Authentication {
@@ -15,7 +16,7 @@ class Authentication {
     );
 
     User? user = FirebaseAuth.instance.currentUser;
-
+    Helper.userFirebase = user;
 
     /*if (user != null) {
       Navigator.of(context).pushReplacement(
@@ -38,26 +39,26 @@ class Authentication {
         'hd': 'gevbologna.org',
         'prompt' : 'select_account',
       });
-      authProvider.addScope('openid');
+/*      authProvider.addScope('openid');
       authProvider.addScope('https://www.googleapis.com/auth/userinfo.email');
-      authProvider.addScope('https://www.googleapis.com/auth/userinfo.profile');
-      authProvider.addScope('https://www.googleapis.com/auth/contacts.readonly');
+      authProvider.addScope('https://www.googleapis.com/auth/userinfo.profile');*/
       try {
         final UserCredential userCredential = await auth.signInWithPopup(authProvider);
         user = userCredential.user;
       } catch (e) {
+        print(e.toString());
       }
     } else {
       final GoogleSignIn googleSignIn = GoogleSignIn(
         clientId: '158895990793-4lseu4mff4bcnaeja3oiod850incvno3.apps.googleusercontent.com',
         hostedDomain: 'gevbologna.org',
-        scopes: <String>[
+/*        scopes: <String>[
           'https://www.googleapis.com/auth/userinfo.email',
           'https://www.googleapis.com/auth/userinfo.profile',
           'openid',
-          'https://www.googleapis.com/auth/contacts.readonly',
-        ],
+        ],*/
       );
+
       final GoogleSignInAccount? googleSignInAccount = await googleSignIn.signIn();
 
       if (googleSignInAccount != null) {
@@ -94,7 +95,9 @@ class Authentication {
           );
         }
       }
-   }
+    }
+
+    Helper.userGoogle = user;
 
     return user;
   }

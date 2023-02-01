@@ -1,32 +1,47 @@
-// ignore_for_file: library_private_types_in_public_api
-
-import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:gesvol/helper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:gesvol/login.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:gesvol/utils/authentication.dart';
 
+import 'login.dart';
+
 class Dashboard extends StatefulWidget {
-  Dashboard({super.key});
+  const Dashboard({Key? key, required User user})
+      : _user = user,
+        super(key: key);
+
+  final User _user;
 
   @override
   _DashboardState createState() => _DashboardState();
 }
 
 class _DashboardState extends State<Dashboard> {
+  late User _user;
+  bool _isSigningOut = false;
+
+  @override
+  void initState() {
+    _user = widget._user;
+    super.initState();
+  }
 
   Widget getDrawer() {
     return  Drawer(
         child: ListView(
           children:   [
             UserAccountsDrawerHeader(
-              accountName: Text(Helper.currentUser!.displayName!),
-              accountEmail: Text(Helper.currentUser!.email),
+              accountName: Text(_user!.displayName!),
+              accountEmail: Text(_user!.email!),
               currentAccountPicture: CircleAvatar(
                   radius: 30.0,
-                  backgroundImage: NetworkImage(Helper.currentUser!.photoUrl!.replaceAll("s96-c", "s192-c")),
+                  //backgroundImage: NetworkImage(Helper.currentUser!.photoUrl!.replaceAll("s96-c", "s192-c")),
+                  backgroundImage: NetworkImage(
+                      _user.photoURL!.isEmpty ?
+                      "https://as2.ftcdn.net/v2/jpg/04/81/46/87/1000_F_481468761_wL1IyJr5atPekfwhSK3dXtI1l6TOzw3T.jpg"
+                      :
+                      _user.photoURL!,
+                  ),
                   backgroundColor: Colors.transparent,
               ),
               decoration: const BoxDecoration(
@@ -53,8 +68,19 @@ class _DashboardState extends State<Dashboard> {
             ListTile(
               leading: const Icon(Icons.logout),
               title: Text(AppLocalizations.of(context)!.drawerLogout),
-              onTap: () {
-                // TODO
+              onTap: () async {
+                setState(() {
+                  _isSigningOut = true;
+                });
+                await Authentication.signOut(context: context);
+                setState(() {
+                  _isSigningOut = false;
+                });
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(
+                    builder: (context) => Login(),
+                  ),
+                );
               }),
         ],
       ),

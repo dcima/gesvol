@@ -1,15 +1,14 @@
 import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:gesvol/firebase_options.dart';
-import 'package:gesvol/user_info_screen.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
 
 class Authentication {
   static Future<FirebaseApp> initializeFirebase({required BuildContext context}) async {
-    print('Authentication');
 
     FirebaseApp firebaseApp = await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
@@ -17,20 +16,14 @@ class Authentication {
 
     User? user = FirebaseAuth.instance.currentUser;
 
-    print('firebaseApp: $firebaseApp');
-    print('user: $user');
 
-    if (user != null) {
-      print('(user != null)');
-
+    /*if (user != null) {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
-          builder: (context) => UserInfoScreen(
-            user: user,
-          ),
+          builder: (context) => Dashboard(),
         ),
       );
-    }
+    }*/
     return firebaseApp;
   }
 
@@ -43,7 +36,7 @@ class Authentication {
       authProvider.setCustomParameters({
         'client_id': '158895990793-4lseu4mff4bcnaeja3oiod850incvno3.apps.googleusercontent.com',
         'hd': 'gevbologna.org',
-        'prompt' : 'consent',
+        'prompt' : 'select_account',
       });
       authProvider.addScope('openid');
       authProvider.addScope('https://www.googleapis.com/auth/userinfo.email');
@@ -53,7 +46,6 @@ class Authentication {
         final UserCredential userCredential = await auth.signInWithPopup(authProvider);
         user = userCredential.user;
       } catch (e) {
-        print(e);
       }
     } else {
       final GoogleSignIn googleSignIn = GoogleSignIn(

@@ -4,7 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
-import 'package:gesvol/user_info_screen.dart';
+import 'package:gesvol/dashboard.dart';
 import 'package:gesvol/utils/authentication.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -152,7 +152,7 @@ class _GoogleSignInButtonState extends State<GoogleSignInButton> {
                 if (user != null) {
                   Navigator.of(context).pushReplacement(
                     MaterialPageRoute(
-                      builder: (context) => UserInfoScreen( user: user  ),
+                      builder: (context) => Dashboard( user: user  ),
                     ),
                   );
                 }

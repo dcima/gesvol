@@ -40,7 +40,6 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
   @override
   void initState() {
     _user = widget._user;
-
     super.initState();
   }
 

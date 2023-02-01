@@ -1,24 +1,12 @@
 // ignore_for_file: library_private_types_in_public_api
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
-import 'package:gesvol/dashboard.dart';
-import 'package:gesvol/helper.dart';
+import 'package:gesvol/user_info_screen.dart';
+import 'package:gesvol/utils/authentication.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-
-GoogleSignIn _googleSignIn = GoogleSignIn(
-  // Optional clientId
-  clientId: '158895990793-4lseu4mff4bcnaeja3oiod850incvno3.apps.googleusercontent.com',
-  hostedDomain: 'gevbologna.org',
-  scopes: <String>[
-    'https://www.googleapis.com/auth/userinfo.email',
-    'https://www.googleapis.com/auth/userinfo.profile',
-    'openid',
-    'https://www.googleapis.com/auth/contacts.readonly',
-  ],
-);
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -28,30 +16,6 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  GoogleSignInAccount? _currentUser;
-
-  @override
-  void initState() {
-    super.initState();
-    _googleSignIn.onCurrentUserChanged.listen((GoogleSignInAccount? account) {
-      setState(() {
-        Helper.currentUser = account;
-        Helper.googleObj = _googleSignIn;
-      });
-    });
-  }
-
-  Future<void> _handleSignIn(context) async {
-    try {
-      await _googleSignIn.signIn();
-      Navigator.push(context, MaterialPageRoute(builder: (_) => const Dashboard()));
-    } catch (error) {
-      print(error);
-    }
-  }
-
-  Future<void> _handleSignOut() => _googleSignIn.disconnect();
-
   Widget buildLogo(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(top: 24.0),
@@ -97,29 +61,32 @@ class _LoginState extends State<Login> {
     );
   }
 
-  Widget buildLoginButton(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 40.0),
-      child: SignInButton(
-        Buttons.Google,
-        text: AppLocalizations.of(context)!.signInWithGoogle,
-        onPressed: () {
-          _handleSignIn(context);
-        },
-      ),
+  Widget buildFuture(BuildContext context) {
+    return FutureBuilder(
+      future: Authentication.initializeFirebase(context: context),
+      builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          return const Text('Error initializing Firebase');
+        } else if (snapshot.connectionState == ConnectionState.done) {
+          return const GoogleSignInButton();
+        }
+        return const CircularProgressIndicator(
+          valueColor: AlwaysStoppedAnimation<Color>(Colors.orange),
+        );
+      },
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.loginPage),
-      ),
-      body: SingleChildScrollView(
-        child: Center(
-          child: Form(
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          title: Text(AppLocalizations.of(context)!.loginPage),
+        ),
+        body: SingleChildScrollView(
+          child: Center(
             child: Container(
               width: 380,
               height: 520,
@@ -141,7 +108,7 @@ class _LoginState extends State<Login> {
                 children: <Widget>[
                   buildLogo(context),
                   welcomeLogin(context),
-                  buildLoginButton(context),
+                  buildFuture(context),
                 ],
               ),
             ),
@@ -151,3 +118,47 @@ class _LoginState extends State<Login> {
     );
   }
 }
+
+class GoogleSignInButton extends StatefulWidget {
+  const GoogleSignInButton({super.key});
+
+  @override
+  _GoogleSignInButtonState createState() => _GoogleSignInButtonState();
+}
+
+class _GoogleSignInButtonState extends State<GoogleSignInButton> {
+  bool _isSigningIn = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 16.0),
+      child: _isSigningIn
+          ? const CircularProgressIndicator(
+              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+            )
+          : SignInButton(
+              Buttons.Google,
+              text: AppLocalizations.of(context)!.signInWithGoogle,
+              onPressed: () async {
+                setState(() {
+                  _isSigningIn = true;
+                });
+                User? user =  await Authentication.signInWithGoogle(context: context);
+                setState(() {
+                  _isSigningIn = false;
+                });
+
+                if (user != null) {
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(
+                      builder: (context) => UserInfoScreen( user: user  ),
+                    ),
+                  );
+                }
+              },
+            ),
+    );
+  }
+}
+

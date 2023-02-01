@@ -3,22 +3,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:gesvol/helper.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:gesvol/login.dart';
+import 'package:gesvol/utils/authentication.dart';
 
 class Dashboard extends StatefulWidget {
-  const Dashboard({super.key});
+  Dashboard({super.key});
 
   @override
   _DashboardState createState() => _DashboardState();
 }
 
 class _DashboardState extends State<Dashboard> {
+
   Widget getDrawer() {
     return  Drawer(
         child: ListView(
           children:   [
             UserAccountsDrawerHeader(
               accountName: Text(Helper.currentUser!.displayName!),
-              accountEmail: Text(Helper.currentUser!.email!),
+              accountEmail: Text(Helper.currentUser!.email),
               currentAccountPicture: CircleAvatar(
                   radius: 30.0,
                   backgroundImage: NetworkImage(Helper.currentUser!.photoUrl!.replaceAll("s96-c", "s192-c")),
@@ -46,10 +51,11 @@ class _DashboardState extends State<Dashboard> {
               onTap: () {},
             ),
             ListTile(
-              leading: Icon(Icons.logout),
+              leading: const Icon(Icons.logout),
               title: Text(AppLocalizations.of(context)!.drawerLogout),
-            onTap: () {},
-            ),
+              onTap: () {
+                // TODO
+              }),
         ],
       ),
     );

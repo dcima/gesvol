@@ -18,13 +18,6 @@ class Authentication {
     User? user = FirebaseAuth.instance.currentUser;
     Helper.userFirebase = user;
 
-    /*if (user != null) {
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (context) => Dashboard(),
-        ),
-      );
-    }*/
     return firebaseApp;
   }
 
@@ -52,11 +45,9 @@ class Authentication {
       final GoogleSignIn googleSignIn = GoogleSignIn(
         clientId: '158895990793-4lseu4mff4bcnaeja3oiod850incvno3.apps.googleusercontent.com',
         hostedDomain: 'gevbologna.org',
-/*        scopes: <String>[
-          'https://www.googleapis.com/auth/userinfo.email',
-          'https://www.googleapis.com/auth/userinfo.profile',
-          'openid',
-        ],*/
+        scopes: <String>[
+          'https://www.googleapis.com/auth/youtube.readonly',
+        ],
       );
 
       final GoogleSignInAccount? googleSignInAccount = await googleSignIn.signIn();

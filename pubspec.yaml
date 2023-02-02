@@ -17,6 +17,7 @@ dependencies:
   firebase_analytics: ^10.1.0
   firebase_auth: ^4.2.5
   firebase_core: ^2.4.1
+  flutter_secure_storage: ^7.0.1
   flutter_signin_button: ^2.0.0
   get: ^4.6.5
   google_fonts: ^4.0.1
@@ -25,6 +26,7 @@ dependencies:
   http: ^0.13.5
   intl: ^0.17.0
   transparent_image: ^2.0.0
+  url_launcher: ^6.1.8
 
 dev_dependencies:
   flutter_test:
@@ -35,7 +37,8 @@ flutter:
   generate: true
   uses-material-design: true
   assets:
-    - assets/logo-cpgev.png
+    - assets/logos/logo-cpgev.png
+    - assets/images/bosco_autunnale.jpg
 
   # To add assets to your application, add an assets section, like this:
   # assets:

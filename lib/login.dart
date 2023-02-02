@@ -23,7 +23,7 @@ class _LoginState extends State<Login> {
         child: SizedBox(
             width: 96,
             height: 120,
-            child: Image.asset('assets/logo-cpgev-bologna_96.png')),
+            child: Image.asset('assets/logos/logo-cpgev.png')),
       ),
     );
   }
@@ -39,7 +39,7 @@ class _LoginState extends State<Login> {
                   AppLocalizations.of(context)!.welcomeLogin,
                   textAlign: TextAlign.center,
                   style: GoogleFonts.montserrat(
-                      textStyle: TextStyle(
+                      textStyle: const TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
                         fontSize: 24,
@@ -85,27 +85,33 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        appBar: AppBar(
-          title: Text(AppLocalizations.of(context)!.loginPage),
+    return Stack(
+      children: [
+        Image.asset(
+          "images/bosco_autunnale.jpg",
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          fit: BoxFit.cover,
         ),
-        body: Center(
-          child: SingleChildScrollView(
+        Scaffold(
+          backgroundColor: Colors.transparent,
+          appBar: AppBar(
+            title: Text(AppLocalizations.of(context)!.loginPage),
+          ),
+          body: Center(
             child: Container(
               decoration: BoxDecoration(
                 border: Border.all(color: Colors.black),
                 borderRadius: const BorderRadius.all(Radius.circular(6.0)),
-                boxShadow: const [
+                /*boxShadow: const [
                   BoxShadow(
                     color: Colors.grey,
                     spreadRadius: 5,
                     blurRadius: 7,
                     offset: Offset(4, 16), // changes position of shadow
                   ),
-                ],
-                gradient: LinearGradient(
+                ],*/
+                gradient: const LinearGradient(
                   colors: [Color(0xff5bb85f), Color(0xff62fff0)],
                   begin: Alignment.centerLeft,
                   end: Alignment.centerRight,
@@ -123,9 +129,8 @@ class _LoginState extends State<Login> {
               ),
             ),
           ),
-        ),
       ),
-    );
+    ]);
   }
 }
 
@@ -164,7 +169,7 @@ class _GoogleSignInButtonState extends State<GoogleSignInButton> {
                   if (user != null) {
                     Navigator.of(context).pushReplacement(
                       MaterialPageRoute(
-                        builder: (context) => Dashboard(),
+                        builder: (context) => const Dashboard(),
                       ),
                     );
                   }

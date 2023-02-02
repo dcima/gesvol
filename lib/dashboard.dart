@@ -4,7 +4,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:gesvol/helper.dart';
 import 'package:gesvol/login.dart';
 import 'package:gesvol/utils/authentication.dart';
-import 'package:googleapis/appengine/v1.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({super.key});
@@ -62,7 +61,7 @@ class _DashboardState extends State<Dashboard> {
               leading: const Icon(Icons.domain),
               title: Text(AppLocalizations.of(context)!.drawerListUsers),
               onTap: () {
-                Navigator.pushNamed(context, '/list_domain_users');
+                Navigator.pushNamed(context, '/list_my_videos');
               },
             ),
             ListTile(

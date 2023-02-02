@@ -18,7 +18,7 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   Widget buildLogo(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 24.0),
+      padding: const EdgeInsets.only(top: 18.0),
       child: Center(
         child: SizedBox(
             width: 96,
@@ -29,34 +29,40 @@ class _LoginState extends State<Login> {
   }
 
   Widget welcomeLogin(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 40.0, left: 8.0, right: 8.0),
-      child: Column(
-        children: [
-          Text(
-              AppLocalizations.of(context)!.welcomeLogin,
-              style: GoogleFonts.montserrat(
-                  textStyle: TextStyle(
-                    color: Colors.grey[800],
-                    fontWeight: FontWeight.bold,
-                    fontSize: 24,
-                ),
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.only(top: 18.0, left: 8.0, right: 8.0),
+        child: Column(
+          children: [
+            Center(
+              child: Text(
+                  AppLocalizations.of(context)!.welcomeLogin,
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.montserrat(
+                      textStyle: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 24,
+                    ),
+                  ),
               ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 40.0),
-            child: Text(
-              AppLocalizations.of(context)!.pressBelowButton,
-              style: GoogleFonts.abel(
-                textStyle: const TextStyle(
-                  color: Colors.deepOrange,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                ),
-              )
             ),
-          ),
-        ],
+            Padding(
+              padding: const EdgeInsets.only(top: 40.0),
+              child: Text(
+                AppLocalizations.of(context)!.pressBelowButton,
+                textAlign: TextAlign.center,
+                style: GoogleFonts.abel(
+                  textStyle: const TextStyle(
+                    color: Colors.red,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
+                )
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -85,16 +91,12 @@ class _LoginState extends State<Login> {
         appBar: AppBar(
           title: Text(AppLocalizations.of(context)!.loginPage),
         ),
-        body: SingleChildScrollView(
-          child: Center(
+        body: Center(
+          child: SingleChildScrollView(
             child: Container(
-              width: 380,
-              height: 520,
-              margin: const EdgeInsets.all(16.0),
               decoration: BoxDecoration(
                 border: Border.all(color: Colors.black),
                 borderRadius: const BorderRadius.all(Radius.circular(6.0)),
-                color: Colors.white,
                 boxShadow: const [
                   BoxShadow(
                     color: Colors.grey,
@@ -103,7 +105,15 @@ class _LoginState extends State<Login> {
                     offset: Offset(4, 16), // changes position of shadow
                   ),
                 ],
+                gradient: LinearGradient(
+                  colors: [Color(0xff5bb85f), Color(0xff62fff0)],
+                  begin: Alignment.centerLeft,
+                  end: Alignment.centerRight,
+                ),
               ),
+              height: 460,
+              margin: const EdgeInsets.all(16.0),
+              width: 280,
               child: Column(
                 children: <Widget>[
                   buildLogo(context),
@@ -132,32 +142,35 @@ class _GoogleSignInButtonState extends State<GoogleSignInButton> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 16.0),
+      padding: const EdgeInsets.only(bottom: 8.0),
       child: _isSigningIn
           ? const CircularProgressIndicator(
               valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
             )
-          : SignInButton(
-              Buttons.Google,
-              text: AppLocalizations.of(context)!.signInWithGoogle,
-              onPressed: () async {
-                setState(() {
-                  _isSigningIn = true;
-                });
-                User? user =  await Authentication.signInWithGoogle(context: context);
-                setState(() {
-                  _isSigningIn = false;
-                });
+          : Padding(
+            padding: const EdgeInsets.only(top: 24.0),
+            child: SignInButton(
+                Buttons.Google,
+                text: AppLocalizations.of(context)!.signInWithGoogle,
+                onPressed: () async {
+                  setState(() {
+                    _isSigningIn = true;
+                  });
+                  User? user =  await Authentication.signInWithGoogle(context: context);
+                  setState(() {
+                    _isSigningIn = false;
+                  });
 
-                if (user != null) {
-                  Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(
-                      builder: (context) => Dashboard(),
-                    ),
-                  );
-                }
-              },
-            ),
+                  if (user != null) {
+                    Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(
+                        builder: (context) => Dashboard(),
+                      ),
+                    );
+                  }
+                },
+              ),
+          ),
     );
   }
 }

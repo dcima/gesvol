@@ -2,9 +2,9 @@
     "@@locale": "fr",
     "appTitle": "Secrétariat CPGEV",
     "drawerAbout": "Sur",
-    "drawerListUsers": "Répertorier les utilisateurs du domaine",
+    "drawerListMyVideos": "Lister mes vidéos",
     "drawerLogout": "Se déconnecter",
-    "loginPage": "Accès au Secrétariat du CPGEV",
+    "drawerDashboard": "Accès au Secrétariat du CPGEV",
     "pressBelowButton" : "appuyez sur le bouton ci-dessous pour vous authentifier",
     "signInWithGoogle": "Connectez-vous avec Google",
     "welcomeLogin": "Bienvenue sur les applications du secrétariat du CPGEV"

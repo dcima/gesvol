@@ -96,7 +96,7 @@ class _LoginState extends State<Login> {
         Scaffold(
           backgroundColor: Colors.transparent,
           appBar: AppBar(
-            title: Text(AppLocalizations.of(context)!.loginPage),
+            title: Text(AppLocalizations.of(context)!.drawerDashboard),
           ),
           body: Center(
             child: Container(

@@ -2,9 +2,9 @@
     "@@locale": "en",
     "appTitle": "CPGEV Secretariat",
     "drawerAbout": "About",
-    "drawerListUsers": "List domain users",
+    "drawerListMyVideos": "List my videos",
     "drawerLogout": "Logout",
-    "loginPage": "Access to the CPGEV Secretariat",
+    "drawerDashboard": "Access to the CPGEV Secretariat",
     "pressBelowButton" : "Press the button below to authenticate",
     "signInWithGoogle": "Sign in with Google",
     "welcomeLogin": "Welcome to the CPGEV secretariat applications"

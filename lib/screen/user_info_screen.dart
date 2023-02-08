@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:gesvol/login.dart';
+import 'package:gesvol/screen/login.dart';
 import 'package:gesvol/utils/authentication.dart';
 
 class UserInfoScreen extends StatefulWidget {

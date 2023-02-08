@@ -5,28 +5,21 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
-import 'package:gesvol/firebase_options.dart';
-import 'package:gesvol/helper.dart';
+import 'package:gesvol/utils/firebase_options.dart';
+import 'package:gesvol/utils/helper.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class Authentication {
   static Future<FirebaseApp> initializeFirebase({required BuildContext context}) async {
-    print('initializeFirebase');
     FirebaseApp firebaseApp = await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
-
     User? user = FirebaseAuth.instance.currentUser;
     Helper.userFirebase = user;
-
-    print('Helper.userFirebase: $Helper.userFirebase');
-    print('firebaseApp: $firebaseApp');
-
     return firebaseApp;
   }
 
   static Future<User?> signInWithGoogle({required BuildContext context}) async {
-    print('signInWithGoogle');
     FirebaseAuth auth = FirebaseAuth.instance;
     User? user;
 
@@ -55,7 +48,6 @@ class Authentication {
         print(e.toString());
       }
     } else {*/
-      print('NOT kIsWeb');
       final GoogleSignIn googleSignIn = GoogleSignIn(
         clientId: '158895990793-4lseu4mff4bcnaeja3oiod850incvno3.apps.googleusercontent.com',
         hostedDomain: 'gevbologna.org',
@@ -63,30 +55,18 @@ class Authentication {
           'https://www.googleapis.com/auth/youtube.readonly',
         ],
       );
-      print('googleSignIn');
-      print(googleSignIn);
-
       if (googleSignIn != null) {
         final GoogleSignInAccount? googleSignInAccount = await googleSignIn.signIn();
-        print('googleSignInAccount');
-        print(googleSignInAccount);
-
         final authClient = await googleSignIn.authenticatedClient();
-        print('authClient');
-        print(authClient);
-
         if (googleSignInAccount != null && authClient != null) {
           Helper.googleSignIn = googleSignIn;
           Helper.authClient = authClient;
-
           final GoogleSignInAuthentication googleSignInAuthentication =
           await googleSignInAccount.authentication;
-
           final AuthCredential credential = GoogleAuthProvider.credential(
             accessToken: googleSignInAuthentication.accessToken,
             idToken: googleSignInAuthentication.idToken,
           );
-
           try {
             final UserCredential userCredential = await auth
                 .signInWithCredential(credential);

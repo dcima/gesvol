@@ -3,8 +3,10 @@
     "appTitle": "CPGEV Secretariat",
     "drawerAbout": "About",
     "drawerListMyVideos": "List my videos",
+    "drawerListNations": "List of nations",
     "drawerLogout": "Logout",
     "drawerDashboard": "Access to the CPGEV Secretariat",
+    "latestSnapshot": "Latest Snapshot",
     "pressBelowButton" : "Press the button below to authenticate",
     "signInWithGoogle": "Sign in with Google",
     "welcomeLogin": "Welcome to the CPGEV secretariat applications"

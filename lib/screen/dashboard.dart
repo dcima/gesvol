@@ -20,12 +20,12 @@ class _DashboardState extends State<Dashboard> {
       appBar: AppBar(
         title: const Text('Dashboard'),
       ),
-      drawer: MyDrawer(),
-      body: Center(
-        child: Container(
+      drawer: const MyDrawer(),
+      body: const Center(
+        child: SizedBox(
           height: 80,
           width: 150,
-          child: Text(
+          child:  Text(
               'Welcome',
               style: TextStyle(color: Colors.red, fontSize: 25),
           ),

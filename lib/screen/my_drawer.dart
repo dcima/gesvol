@@ -64,6 +64,13 @@ class _MyDrawerState extends State<MyDrawer> {
             },
           ),
           ListTile(
+            leading: const Icon(Icons.domain),
+            title: Text(AppLocalizations.of(context)!.drawerListNations),
+            onTap: () {
+              Navigator.pushNamed(context, '/list_nations');
+            },
+          ),
+          ListTile(
               leading: const Icon(Icons.logout),
               title: Text(AppLocalizations.of(context)!.drawerLogout),
               onTap: () async {

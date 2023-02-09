@@ -1,7 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
+import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
-@immutable
 class Nazione {
   final String area;
   final String capital;
@@ -32,43 +30,54 @@ class Nazione {
     required this.population,
     required this.tld,
   });
+}
 
-  factory Nazione.fromFirestore(
-      DocumentSnapshot<Map<String, dynamic>> snapshot,
-      SnapshotOptions? options,
-      ) {
-    final data = snapshot.data();
-    return Nazione(
-      area: data?['area'],
-      capital: data?['capital'],
-      continent: data?['continent'],
-      country: data?['country'],
-      currencyCode: data?['currencyCode'],
-      currencyName: data?['currencyName'],
-      fips: data?['fips'],
-      iso: data?['iso'],
-      iso3: data?['iso3'],
-      isoNumeric: data?['isoNumeric'],
-      phone: data?['phone'],
-      population: data?['population'],
-      tld: data?['tld'],
-    );
+class NazioneDataSource extends DataGridSource {
+  NazioneDataSource(this.nazioni) {
+    _buildDataRow();
   }
 
-  Map<String, dynamic> toFirestore() {
-    return {
-      if (area != null) "area": area,
-      if (capital != null) "capital": capital,
-      if (continent != null) "continent": continent,
-      if (country != null) "country": country,
-      if (currencyCode != null) "currencyCode": currencyCode,
-      if (currencyName != null) "currencyName": currencyName,
-      if (fips != null) "fips": fips,
-      if (iso3 != null) "iso3": iso3,
-      if (isoNumeric != null) "isoNumeric": isoNumeric,
-      if (phone != null) "phone": phone,
-      if (population != null) "population": population,
-      if (tld != null) "tld": tld,
-    };
+  List<DataGridRow> dataGridRows = [];
+  List<Nazione> nazioni;
+
+  void _buildDataRow() {
+    dataGridRows = nazioni
+        .map<DataGridRow>((e) => DataGridRow(cells: [
+          DataGridCell<String>(columnName: 'area',          value: e.area),
+          DataGridCell<String>(columnName: 'capital',       value: e.capital),
+          DataGridCell<String>(columnName: 'continent',     value: e.continent),
+          DataGridCell<String>(columnName: 'country',       value: e.country),
+          DataGridCell<String>(columnName: 'currencyCode',  value: e.currencyCode),
+          DataGridCell<String>(columnName: 'currencyName',  value: e.currencyName),
+          DataGridCell<String>(columnName: 'fips',          value: e.fips),
+          DataGridCell<String>(columnName: 'iso',           value: e.iso),
+          DataGridCell<String>(columnName: 'iso3',          value: e.iso3),
+          DataGridCell<String>(columnName: 'isoNumeric',    value: e.isoNumeric),
+          DataGridCell<String>(columnName: 'phone',         value: e.phone),
+          DataGridCell<String>(columnName: 'population',    value: e.population),
+          DataGridCell<String>(columnName: 'tld',           value: e.tld),
+        ]))
+        .toList();
+  }
+
+  @override
+  List<DataGridRow> get rows => dataGridRows;
+
+  @override
+  DataGridRowAdapter buildRow(
+      DataGridRow row,
+      ) {
+    return DataGridRowAdapter(
+        cells: row.getCells().map<Widget>((e) {
+          return Container(
+            alignment: Alignment.center,
+            padding: const EdgeInsets.all(8.0),
+            child: Text(e.value.toString()),
+          );
+        }).toList());
+  }
+
+  void updateDataGridSource() {
+    notifyListeners();
   }
 }

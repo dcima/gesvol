@@ -23,6 +23,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+      ),
       debugShowCheckedModeBanner: false,
       localizationsDelegates: const [
         AppLocalizations.delegate,
@@ -41,7 +45,7 @@ class MyApp extends StatelessWidget {
         '/': (context) => const Login(),
         '/dashboard'              : (context) => const Dashboard(),
         '/list_my_videos'         : (context) => const ListMyVideos(),
-        '/list_nations'           : (context) => const ElencoNazioni(),
+        '/list_nations'           : (context) => ElencoNazioni(),
       },
 
     );

@@ -18,6 +18,7 @@ dependencies:
   firebase_analytics: ^10.1.0
   firebase_auth: ^4.2.5
   firebase_core: ^2.4.1
+  firebase_database: ^10.0.10
   flutter_secure_storage: ^7.0.1
   flutter_signin_button: ^2.0.0
   get: ^4.6.5
@@ -26,6 +27,24 @@ dependencies:
   googleapis: ^10.0.0
   http: ^0.13.5
   intl: ^0.17.0
+  syncfusion_flutter_barcodes: ^20.4.49
+  syncfusion_flutter_calendar: ^20.4.49
+  syncfusion_flutter_charts: ^20.4.49
+  syncfusion_flutter_core: ^20.4.49
+  syncfusion_flutter_datagrid: ^20.4.49
+  syncfusion_flutter_datagrid_export: ^20.4.49-beta
+  syncfusion_flutter_datepicker: ^20.4.49
+  syncfusion_flutter_gauges: ^20.4.49
+  syncfusion_flutter_maps: ^20.4.49
+  syncfusion_flutter_pdf: ^20.4.49
+  syncfusion_flutter_pdfviewer: ^20.4.49
+  syncfusion_flutter_signaturepad: ^20.4.49
+  syncfusion_flutter_sliders: ^20.4.49
+  syncfusion_flutter_treemap: ^20.4.49-beta
+  syncfusion_flutter_xlsio: ^20.4.49-beta
+  syncfusion_localizations: ^20.4.49
+  syncfusion_officechart: ^20.4.49-beta
+  syncfusion_officecore: ^20.4.49-beta
   transparent_image: ^2.0.0
   url_launcher: ^6.1.8
 

@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 class Nazione {
@@ -15,7 +16,7 @@ class Nazione {
   final String population;
   final String tld;
 
-  const Nazione({
+  Nazione({
     required this.area,
     required this.capital,
     required this.continent,
@@ -30,18 +31,47 @@ class Nazione {
     required this.population,
     required this.tld,
   });
+
+  Nazione.fromJson(Map<String, dynamic> json)
+      : area          = json['area'],
+        capital       = json['capital'],
+        continent     = json['continent'],
+        country       = json['country'],
+        currencyCode  = json['currencyCode'],
+        currencyName  = json['currencyName'],
+        fips          = json['fips'],
+        iso           = json['iso'],
+        iso3          = json['iso3'],
+        isoNumeric    = json['isoNumeric'],
+        phone         = json['phone'],
+        population    = json['population'],
+        tld           = json['tld'];
+
+  Map<String, dynamic> toJson() => {
+    'area'          : area,
+    'capital'       : capital,
+    'continent'     : continent,
+    'country'       : country,
+    'currencyCode'  : currencyCode,
+    'currencyName'  : currencyName,
+    'fips'          : fips,
+    'iso'           : iso,
+    'iso3'          : iso3,
+    'isoNumeric'    : isoNumeric,
+    'phone'         : phone,
+    'population'    : population,
+    'tld'           : tld,
+  };
 }
 
 class NazioneDataSource extends DataGridSource {
-  NazioneDataSource(this.nazioni) {
-    _buildDataRow();
-  }
+  NazioneDataSource(this._nazioni) { buildDataRow(); }
 
   List<DataGridRow> dataGridRows = [];
-  List<Nazione> nazioni;
+  final List<Nazione> _nazioni;
 
-  void _buildDataRow() {
-    dataGridRows = nazioni
+  void buildDataRow() {
+    dataGridRows = _nazioni
         .map<DataGridRow>((e) => DataGridRow(cells: [
           DataGridCell<String>(columnName: 'area',          value: e.area),
           DataGridCell<String>(columnName: 'capital',       value: e.capital),
@@ -64,9 +94,7 @@ class NazioneDataSource extends DataGridSource {
   List<DataGridRow> get rows => dataGridRows;
 
   @override
-  DataGridRowAdapter buildRow(
-      DataGridRow row,
-      ) {
+  DataGridRowAdapter? buildRow( DataGridRow row ) {
     return DataGridRowAdapter(
         cells: row.getCells().map<Widget>((e) {
           return Container(

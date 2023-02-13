@@ -10,11 +10,11 @@ class MyDrawer extends StatefulWidget {
   const MyDrawer({super.key});
 
   @override
-  _MyDrawerState createState() => _MyDrawerState();
+  MyDrawerState createState() => MyDrawerState();
 }
 
-class _MyDrawerState extends State<MyDrawer> {
-  User? _user = Helper.userGoogle;
+class MyDrawerState extends State<MyDrawer> {
+  final User? _user = Helper.userGoogle;
   bool _isSigningOut = false;
 
   @override

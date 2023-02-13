@@ -1,21 +1,17 @@
-import 'dart:developer';
-
+import '../../utils/helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:gesvol/screen/my_drawer.dart';
 import 'package:googleapis/youtube/v3.dart';
-import 'package:gesvol/models/channel_info.dart';
-
-import '../../utils/helper.dart';
 
 class ListMyVideos extends StatefulWidget {
   const ListMyVideos({super.key});
 
   @override
-_ListMyVideosState createState() => _ListMyVideosState();
+  ListMyVideosState createState() => ListMyVideosState();
 }
 
-class _ListMyVideosState extends State<ListMyVideos> {
+class ListMyVideosState extends State<ListMyVideos> {
   //late Future<ChannelListResponse> _playlist;
   late Future<PlaylistListResponse> _playlist;
 
@@ -54,7 +50,7 @@ class _ListMyVideosState extends State<ListMyVideos> {
             } else if (snapshot.hasData) {
               print(snapshot.data?.toJson());
 
-              var t = snapshot.data?.items?.first?.snippet?.channelTitle;
+              var t = snapshot.data?.items?.first.snippet?.channelTitle;
               return Text(
                   t ?? 'empty channel',
                   style: const TextStyle(color: Colors.cyan, fontSize: 36)
@@ -65,7 +61,6 @@ class _ListMyVideosState extends State<ListMyVideos> {
           } else {
             return Text('State: ${snapshot.connectionState}');
           }
-          return Text('peppa pig');
         }
       )
     );

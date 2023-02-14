@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
+import 'package:flutter/material.dart';
 
 class Nazione {
   final String area;
@@ -95,10 +96,20 @@ class NazioneDataSource extends DataGridSource {
 
   @override
   DataGridRowAdapter? buildRow( DataGridRow row ) {
+    var aDestra = ["area","isoNumeric", "phone", "population"];
+    Color getBackgroundColor() {
+      int index = effectiveRows.indexOf(row);
+      if (index % 2 == 0) {
+        return Colors.grey.shade200;
+      } else {
+        return Colors.white;
+      }
+    }
     return DataGridRowAdapter(
+        color: getBackgroundColor(),
         cells: row.getCells().map<Widget>((e) {
           return Container(
-            alignment: Alignment.center,
+            alignment: aDestra.contains(e.columnName) ? Alignment.centerRight : Alignment.centerLeft,
             padding: const EdgeInsets.all(8.0),
             child: Text(e.value.toString()),
           );

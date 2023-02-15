@@ -1,3 +1,4 @@
+/**
 import '../my_drawer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -241,3 +242,217 @@ class CustomColumnSizer extends ColumnSizer {
       return super.computeCellWidth(column, row, cellValue, textStyle);
     }
   }
+**/
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:syncfusion_flutter_pdf/pdf.dart';
+
+import '../my_drawer.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:intl/intl.dart';
+import 'package:syncfusion_flutter_core/theme.dart';
+import 'package:syncfusion_flutter_datagrid/datagrid.dart';
+import 'package:syncfusion_flutter_datagrid_export/export.dart';
+import 'package:syncfusion_flutter_xlsio/xlsio.dart' hide Column;
+// Local import
+import 'package:gesvol/helper/save_file_mobile.dart'
+  if (dart.library.html) 'package:gesvol/helper//save_file_web.dart' as helper;
+
+class ElencoNazioni extends StatefulWidget {
+  ElencoNazioni({Key? key}) : super(key: key);
+
+  @override
+  _ElencoNazioniState createState() => _ElencoNazioniState();
+}
+/**
+class _ElencoNazioniState extends State<ElencoNazioni> {
+  final CollectionReference _refNazioni = FirebaseFirestore.instance.collection('nazioni');
+  final GlobalKey<SfDataGridState> keySfDataGrid = GlobalKey<SfDataGridState>();
+  late Stream<QuerySnapshot> _streamNazioni;
+
+  initState() {
+    super.initState();
+    _streamNazioni = _refNazioni.snapshots();
+  }
+
+  Future<void> _exportDataGridToExcel() async {
+    final Workbook workbook = _key.currentState!.exportToExcelWorkbook();
+
+    final List<int> bytes = workbook.saveAsStream();
+    workbook.dispose();
+
+    await helper.saveAndLaunchFile(bytes, 'DataGrid.xlsx');
+  }
+
+  Future<void> _exportDataGridToPdf() async {
+    final PdfDocument document =
+    keySfDataGrid.currentState!.exportToPdfDocument(fitAllColumnsInOnePage: true);
+
+    final List<int> bytes = document.saveSync();
+    await helper.saveAndLaunchFile(bytes, 'DataGrid.pdf');
+    document.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          title: Text(AppLocalizations.of(context)!.drawerListNations),
+          actions: [
+            IconButton(
+                onPressed: () async {
+                  await GoogleSignIn().signOut();
+                  FirebaseAuth.instance.signOut();
+                },
+                icon: Icon(Icons.power_settings_new))
+          ],
+        ),
+        drawer: const MyDrawer(),
+        body:  Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Container(
+              height: 50.0,
+              width: 150.0,
+              padding: const EdgeInsets.all(10.0),
+              child: MaterialButton(
+                  color: Colors.blue,
+                  child: const Center(
+                      child: Text(
+                        'Export to Excel',
+                        style: TextStyle(color: Colors.white),
+                      )),
+                  onPressed: () async {
+                    final Workbook workbook =
+                    keySfDataGrid.currentState!.exportToExcelWorkbook();
+                    final List<int> bytes = workbook.saveAsStream();
+                    workbook.dispose();
+                    await helper.saveAndLaunchFile(bytes, 'DataGrid.xlsx');
+                  }),
+            ),
+            Expanded(
+              child: _buildDataGrid(context),
+            ),
+          ],
+        )
+    );
+
+}
+    **/
+
+class _ElencoNazioniState extends State<ElencoNazioni> {
+  final CollectionReference _refNazioni = FirebaseFirestore.instance.collection(
+      'nazioni');
+  final GlobalKey<SfDataGridState> keySfDataGrid = GlobalKey<SfDataGridState>();
+  late Stream<QuerySnapshot> _streamNazioni;
+
+  initState() {
+    super.initState();
+    _streamNazioni = _refNazioni.snapshots();
+  }
+
+  Future<void> _exportDataGridToExcel() async {
+    final Workbook workbook = keySfDataGrid.currentState!
+        .exportToExcelWorkbook();
+    final List<int> bytes = workbook.saveAsStream();
+    workbook.dispose();
+    await helper.saveAndLaunchFile(bytes, 'DataGrid.xlsx');
+  }
+
+  Future<void> _exportDataGridToPdf() async {
+    final PdfDocument document =
+    keySfDataGrid.currentState!.exportToPdfDocument(
+        fitAllColumnsInOnePage: true);
+
+    final List<int> bytes = document.saveSync();
+    await helper.saveAndLaunchFile(bytes, 'DataGrid.pdf');
+    document.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(AppLocalizations.of(context)!.drawerListNations),
+        actions: [
+          IconButton(
+              onPressed: () async {
+                await GoogleSignIn().signOut();
+                FirebaseAuth.instance.signOut();
+              },
+              icon: Icon(Icons.power_settings_new))
+        ],
+      ),
+      drawer: const MyDrawer(),
+      body: StreamBuilder<QuerySnapshot>(
+        stream: _streamNazioni,
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          if (snapshot.hasError) {
+            return Center(child: Text(snapshot.error.toString()));
+          }
+          if (snapshot.connectionState == ConnectionState.active) {
+            QuerySnapshot querySnapshot = snapshot.data;
+            List<QueryDocumentSnapshot> listQueryDocumentSnapshot =
+                querySnapshot.docs;
+
+            return ListView.builder(
+                itemCount: listQueryDocumentSnapshot.length,
+                itemBuilder: (context, index) {
+                  QueryDocumentSnapshot document =
+                  listQueryDocumentSnapshot[index];
+                  return ShoppingListItem(document: document);
+                });
+          }
+
+          return Center(child: CircularProgressIndicator());
+        },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) => AddItem()));
+        },
+        tooltip: 'Increment',
+        child: const Icon(Icons.add),
+      ), // This trailing comma makes auto-formatting nicer for build methods.
+    );
+  }
+}
+
+class ShoppingListItem extends StatefulWidget {
+  const ShoppingListItem({
+    Key? key,
+    required this.document,
+  }) : super(key: key);
+
+  final QueryDocumentSnapshot<Object?> document;
+
+  @override
+  State<ShoppingListItem> createState() => _ShoppingListItemState();
+}
+
+class _ShoppingListItemState extends State<ShoppingListItem> {
+  bool _purchased = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      onTap: () {
+        Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => ItemDetails(widget.document.id)));
+      },
+      title: Text(widget.document['name']),
+      subtitle: Text(widget.document['quantity']),
+      trailing: Checkbox(
+        onChanged: (value) {
+          setState(() {
+              _purchased = value ?? false;
+            },
+          );
+        },
+        value: _purchased,
+      ),
+    );
+}

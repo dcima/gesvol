@@ -42,7 +42,7 @@ class MyApp extends StatelessWidget {
       ],
       initialRoute: '/',
       routes: {
-        '/': (context) => const Login(),
+        '/'                       : (context) => const Login(),
         '/dashboard'              : (context) => const Dashboard(),
         '/list_my_videos'         : (context) => const ListMyVideos(),
         '/list_nations'           : (context) => ElencoNazioni(),

@@ -73,18 +73,47 @@ class MyDrawerState extends State<MyDrawer> {
           ListTile(
               leading: const Icon(Icons.logout),
               title: Text(AppLocalizations.of(context)!.drawerLogout),
-              onTap: () async {
-                setState(() {
-                  _isSigningOut = true;
-                });
-                await Authentication.signOut(context: context);
-                setState(() {
-                  _isSigningOut = false;
-                });
-                Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(
-                    builder: (context) => const Login(),
-                  ),
+              onTap: ()  {
+                // set up the buttons
+                Widget cancelButton = TextButton(
+                  child: Text("Cancel"),
+                  onPressed:  () {
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                  },
+                );
+                Widget continueButton = TextButton(
+                  child: Text("Continue"),
+                  onPressed:  () async {
+                    setState(() {
+                      _isSigningOut = true;
+                    });
+                    await Authentication.signOut(context: context);
+                    setState(() {
+                      _isSigningOut = false;
+                    });
+                    Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(builder: (BuildContext context) => Login()),
+                        ModalRoute.withName('/')
+                    );
+                  },
+                );
+                // set up the AlertDialog
+                AlertDialog alert = AlertDialog(
+                  title: Text("Conferma"),
+                  content: Text("Confermi uscita dall'applicazione ?"),
+                  actions: [
+                    cancelButton,
+                    continueButton,
+                  ],
+                );
+                // show the dialog
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return alert;
+                  },
                 );
               }),
         ],

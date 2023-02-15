@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class Nazione {
   final String area;
@@ -10,8 +11,8 @@ class Nazione {
   final String currencyCode;
   final String currencyName;
   final String fips;
-  final String iso3;
   final String iso;
+  final String iso3;
   final String isoNumeric;
   final String phone;
   final String population;
@@ -108,10 +109,21 @@ class NazioneDataSource extends DataGridSource {
     return DataGridRowAdapter(
         color: getBackgroundColor(),
         cells: row.getCells().map<Widget>((e) {
+          var numerics = ["area","isoNumeric", "population"];
+          var n = 0;
+          try {
+            n = int.parse(e.value.toString());
+          } catch(e) {
+            n = 0;
+          }
+          var formatter = NumberFormat.decimalPattern('it_IT');
           return Container(
             alignment: aDestra.contains(e.columnName) ? Alignment.centerRight : Alignment.centerLeft,
             padding: const EdgeInsets.all(8.0),
-            child: Text(e.value.toString()),
+            child: numerics.contains(e.columnName) ?
+              Text(formatter.format(n))
+                :
+              Text(e.value.toString()),
           );
         }).toList());
   }

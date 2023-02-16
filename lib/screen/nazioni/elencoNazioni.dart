@@ -243,6 +243,8 @@ class CustomColumnSizer extends ColumnSizer {
     }
   }
 **/
+import 'dart:convert';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:syncfusion_flutter_pdf/pdf.dart';
@@ -260,12 +262,6 @@ import 'package:syncfusion_flutter_xlsio/xlsio.dart' hide Column;
 import 'package:gesvol/helper/save_file_mobile.dart'
   if (dart.library.html) 'package:gesvol/helper//save_file_web.dart' as helper;
 
-class ElencoNazioni extends StatefulWidget {
-  ElencoNazioni({Key? key}) : super(key: key);
-
-  @override
-  _ElencoNazioniState createState() => _ElencoNazioniState();
-}
 /**
 class _ElencoNazioniState extends State<ElencoNazioni> {
   final CollectionReference _refNazioni = FirebaseFirestore.instance.collection('nazioni');
@@ -342,10 +338,21 @@ class _ElencoNazioniState extends State<ElencoNazioni> {
 }
     **/
 
+class ElencoNazioni extends StatefulWidget {
+  ElencoNazioni({Key? key}) : super(key: key);
+
+  @override
+  _ElencoNazioniState createState() => _ElencoNazioniState();
+}
+
 class _ElencoNazioniState extends State<ElencoNazioni> {
-  final CollectionReference _refNazioni = FirebaseFirestore.instance.collection(
-      'nazioni');
+  final CollectionReference _refNazioni = FirebaseFirestore.instance.collection('nazioni');
+  final CustomColumnSizer _columnSizer = CustomColumnSizer();
   final GlobalKey<SfDataGridState> keySfDataGrid = GlobalKey<SfDataGridState>();
+  late List<Nazione> _nazioni = [];
+  late List<QueryDocumentSnapshot> listQueryDocumentSnapshot;
+  late NazioneDataSource _nazioneDataSource;
+  late QuerySnapshot querySnapshot;
   late Stream<QuerySnapshot> _streamNazioni;
 
   initState() {
@@ -393,36 +400,268 @@ class _ElencoNazioniState extends State<ElencoNazioni> {
             return Center(child: Text(snapshot.error.toString()));
           }
           if (snapshot.connectionState == ConnectionState.active) {
-            QuerySnapshot querySnapshot = snapshot.data;
-            List<QueryDocumentSnapshot> listQueryDocumentSnapshot =
-                querySnapshot.docs;
+            querySnapshot = snapshot.data;
+            listQueryDocumentSnapshot = querySnapshot.docs;
+            listQueryDocumentSnapshot.forEach((e) {
+              var n = Nazione.fromJson(e.data().toString());
+              //print(jsonDecode(jsonData));
+              print(jsonData);
+            });
+            _nazioneDataSource = NazioneDataSource(_nazioni);
 
-            return ListView.builder(
+/*            return ListView.builder(
                 itemCount: listQueryDocumentSnapshot.length,
                 itemBuilder: (context, index) {
-                  QueryDocumentSnapshot document =
-                  listQueryDocumentSnapshot[index];
-                  return ShoppingListItem(document: document);
-                });
+                  QueryDocumentSnapshot document = listQueryDocumentSnapshot[index];
+                  return NazioniListItem(document: document);
+                });*/
+              return SfDataGridTheme(
+                data: SfDataGridThemeData(
+                    headerColor: Colors.greenAccent,
+                    headerHoverColor: Colors.yellow
+                ),
+                child: SfDataGrid(
+                  allowMultiColumnSorting: true,
+                  allowSorting: true,
+                  allowTriStateSorting: true,
+                  columns: <GridColumn>[
+                    GridColumn(
+                        columnName: 'area',
+                        label: Container(
+                            padding: const EdgeInsets.all(16.0),
+                            alignment: Alignment.centerLeft,
+                            child: const Text(
+                              'area\r\n(kmq)',
+                            ))),
+                    GridColumn(
+                        columnName: 'capital',
+                        label: Container(
+                            padding: const EdgeInsets.all(8.0),
+                            alignment: Alignment.center,
+                            child: const Text('capital'))),
+                    GridColumn(
+                        columnName: 'continent',
+                        label: Container(
+                            padding: const EdgeInsets.all(8.0),
+                            alignment: Alignment.center,
+                            child: const Text(
+                              'continent',
+                              overflow: TextOverflow.ellipsis,
+                            ))),
+                    GridColumn(
+                        columnName: 'country',
+                        label: Container(
+                            padding: const EdgeInsets.all(8.0),
+                            alignment: Alignment.center,
+                            child: const Text('country'))),
+                    GridColumn(
+                        columnName: 'currencyCode',
+                        label: Container(
+                            padding: const EdgeInsets.all(8.0),
+                            alignment: Alignment.center,
+                            child: const Text('currencyCode'))),
+                    GridColumn(
+                        columnName: 'currencyName',
+                        label: Container(
+                            padding: const EdgeInsets.all(8.0),
+                            alignment: Alignment.center,
+                            child: const Text('currencyName'))),
+                    GridColumn(
+                        columnName: 'fips',
+                        label: Container(
+                            padding: const EdgeInsets.all(8.0),
+                            alignment: Alignment.center,
+                            child: const Text('fips'))),
+                    GridColumn(
+                        columnName: 'iso',
+                        label: Container(
+                            padding: const EdgeInsets.all(8.0),
+                            alignment: Alignment.center,
+                            child: const Text('iso'))),
+                    GridColumn(
+                        columnName: 'iso3',
+                        label: Container(
+                            padding: const EdgeInsets.all(8.0),
+                            alignment: Alignment.center,
+                            child: const Text('iso3'))),
+                    GridColumn(
+                        columnName: 'isoNumeric',
+                        label: Container(
+                            padding: const EdgeInsets.all(8.0),
+                            alignment: Alignment.center,
+                            child: const Text('isoNumeric'))),
+                    GridColumn(
+                        columnName: 'phone',
+                        label: Container(
+                            padding: const EdgeInsets.all(8.0),
+                            alignment: Alignment.center,
+                            child: const Text('phone'))),
+                    GridColumn(
+                        columnName: 'population',
+                        label: Container(
+                            padding: const EdgeInsets.all(8.0),
+                            alignment: Alignment.center,
+                            child: const Text('population (milioni)'))),
+                    GridColumn(
+                        columnName: 'tld',
+                        label: Container(
+                            padding: const EdgeInsets.all(8.0),
+                            alignment: Alignment.center,
+                            child: const Text('tld'))),
+                  ],
+                  columnSizer: _columnSizer,
+                  columnWidthMode: ColumnWidthMode.auto,
+                  gridLinesVisibility: GridLinesVisibility.both,
+                  headerGridLinesVisibility: GridLinesVisibility.both,
+                  isScrollbarAlwaysShown: true,
+                  onQueryRowHeight: (details) {
+                    // Set the row height as 70.0 to the column header row.
+                    return details.rowIndex == 0 ? 70.0 : 49.0;
+                  },
+                  source: _nazioneDataSource,
+                ),
+              );
           }
 
           return Center(child: CircularProgressIndicator());
         },
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.of(context).push(
-              MaterialPageRoute(builder: (context) => AddItem()));
-        },
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
+class Nazione {
+  final String area;
+  final String capital;
+  final String continent;
+  final String country;
+  final String currencyCode;
+  final String currencyName;
+  final String fips;
+  final String iso;
+  final String iso3;
+  final String isoNumeric;
+  final String phone;
+  final String population;
+  final String tld;
 
-class ShoppingListItem extends StatefulWidget {
-  const ShoppingListItem({
+  Nazione(Object? data, {
+    required this.area,
+    required this.capital,
+    required this.continent,
+    required this.country,
+    required this.currencyCode,
+    required this.currencyName,
+    required this.fips,
+    required this.iso,
+    required this.iso3,
+    required this.isoNumeric,
+    required this.phone,
+    required this.population,
+    required this.tld,
+  });
+
+  Nazione.fromJson(Map<String, dynamic> json)
+      : area          = json['area'],
+        capital       = json['capital'],
+        continent     = json['continent'],
+        country       = json['country'],
+        currencyCode  = json['currencyCode'],
+        currencyName  = json['currencyName'],
+        fips          = json['fips'],
+        iso           = json['iso'],
+        iso3          = json['iso3'],
+        isoNumeric    = json['isoNumeric'],
+        phone         = json['phone'],
+        population    = json['population'],
+        tld           = json['tld'];
+
+  Map<String, dynamic> toJson() => {
+    'area'          : area,
+    'capital'       : capital,
+    'continent'     : continent,
+    'country'       : country,
+    'currencyCode'  : currencyCode,
+    'currencyName'  : currencyName,
+    'fips'          : fips,
+    'iso'           : iso,
+    'iso3'          : iso3,
+    'isoNumeric'    : isoNumeric,
+    'phone'         : phone,
+    'population'    : population,
+    'tld'           : tld,
+  };
+}
+
+class NazioneDataSource extends DataGridSource {
+  NazioneDataSource(this._nazioni) { buildDataRow(); }
+
+  List<DataGridRow> dataGridRows = [];
+  final List<Nazione> _nazioni;
+
+  void buildDataRow() {
+    dataGridRows = _nazioni
+        .map<DataGridRow>((e) => DataGridRow(cells: [
+      DataGridCell<String>(columnName: 'area',          value: e.area),
+      DataGridCell<String>(columnName: 'capital',       value: e.capital),
+      DataGridCell<String>(columnName: 'continent',     value: e.continent),
+      DataGridCell<String>(columnName: 'country',       value: e.country),
+      DataGridCell<String>(columnName: 'currencyCode',  value: e.currencyCode),
+      DataGridCell<String>(columnName: 'currencyName',  value: e.currencyName),
+      DataGridCell<String>(columnName: 'fips',          value: e.fips),
+      DataGridCell<String>(columnName: 'iso',           value: e.iso),
+      DataGridCell<String>(columnName: 'iso3',          value: e.iso3),
+      DataGridCell<String>(columnName: 'isoNumeric',    value: e.isoNumeric),
+      DataGridCell<String>(columnName: 'phone',         value: e.phone),
+      DataGridCell<String>(columnName: 'population',    value: e.population),
+      DataGridCell<String>(columnName: 'tld',           value: e.tld),
+    ]))
+        .toList();
+  }
+
+  @override
+  List<DataGridRow> get rows => dataGridRows;
+
+  @override
+  DataGridRowAdapter? buildRow( DataGridRow row ) {
+    var aDestra = ["area","isoNumeric", "phone", "population"];
+    Color getBackgroundColor() {
+      int index = effectiveRows.indexOf(row);
+      if (index % 2 == 0) {
+        return Colors.grey.shade200;
+      } else {
+        return Colors.white;
+      }
+    }
+    return DataGridRowAdapter(
+        color: getBackgroundColor(),
+        cells: row.getCells().map<Widget>((e) {
+          var numerics = ["area","isoNumeric", "population"];
+          var n = 0;
+          try {
+            n = int.parse(e.value.toString());
+          } catch(e) {
+            n = 0;
+          }
+          var formatter = NumberFormat.decimalPattern('it_IT');
+          return Container(
+            alignment: aDestra.contains(e.columnName) ? Alignment.centerRight : Alignment.centerLeft,
+            padding: const EdgeInsets.all(8.0),
+            child: numerics.contains(e.columnName) ?
+            Text(formatter.format(n))
+                :
+            Text(e.value.toString()),
+          );
+        }).toList());
+  }
+
+  void updateDataGridSource() {
+    notifyListeners();
+  }
+}
+/*
+
+class NazioniListItem extends StatefulWidget {
+  const NazioniListItem({
     Key? key,
     required this.document,
   }) : super(key: key);
@@ -430,29 +669,44 @@ class ShoppingListItem extends StatefulWidget {
   final QueryDocumentSnapshot<Object?> document;
 
   @override
-  State<ShoppingListItem> createState() => _ShoppingListItemState();
+  State<NazioniListItem> createState() => _NazioniListItemState();
 }
 
-class _ShoppingListItemState extends State<ShoppingListItem> {
-  bool _purchased = false;
-
+class _NazioniListItemState extends State<NazioniListItem> {
   @override
   Widget build(BuildContext context) {
     return ListTile(
       onTap: () {
         Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => ItemDetails(widget.document.id)));
+            builder: (context) => Text('ciao')));
       },
-      title: Text(widget.document['name']),
-      subtitle: Text(widget.document['quantity']),
+      title: Text(widget.document['country']),
+      subtitle: Text(widget.document['iso']),
       trailing: Checkbox(
         onChanged: (value) {
-          setState(() {
-              _purchased = value ?? false;
-            },
-          );
         },
-        value: _purchased,
+        value: true,
       ),
     );
+  }
+}
+*/
+
+class CustomColumnSizer extends ColumnSizer {
+  @override
+  double computeCellWidth(GridColumn column, DataGridRow row, Object? cellValue, TextStyle textStyle) {
+    var numerics = ["area","isoNumeric", "population"];
+    var n = 0;
+    try {
+      n = int.parse(cellValue.toString());
+    } catch(e) {
+      n = 0;
+    }
+    if (numerics.contains(column.columnName)) {
+      var formatter = NumberFormat.decimalPattern('it_IT');
+      cellValue = formatter.format(n);
+    }
+
+    return super.computeCellWidth(column, row, cellValue, textStyle);
+  }
 }

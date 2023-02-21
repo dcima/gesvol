@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
@@ -46,7 +45,7 @@ class MyApp extends StatelessWidget {
         '/'                       : (context) => const Login(),
         '/dashboard'              : (context) => const Dashboard(),
         '/list_my_videos'         : (context) => const ListMyVideos(),
-        '/list_nations'           : (context) => ElencoNazioni(),
+        '/list_nations'           : (context) => const ElencoNazioni(),
       },
 
     );

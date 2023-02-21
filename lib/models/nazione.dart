@@ -1,8 +1,3 @@
-import 'package:flutter/cupertino.dart';
-import 'package:syncfusion_flutter_datagrid/datagrid.dart';
-import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-
 class Nazione {
   final String area;
   final String capital;
@@ -65,7 +60,7 @@ class Nazione {
     'tld'           : tld,
   };
 }
-
+/**
 class NazioneDataSource extends DataGridSource {
   NazioneDataSource(this._nazioni) { buildDataRow(); }
 
@@ -132,3 +127,4 @@ class NazioneDataSource extends DataGridSource {
     notifyListeners();
   }
 }
+**/

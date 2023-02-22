@@ -1,10 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:gesvol/utils/authentication.dart';
 import 'package:gesvol/utils/helper.dart';
-
-import 'login.dart';
 
 class MyDrawer extends StatefulWidget {
   const MyDrawer({super.key});
@@ -70,55 +67,9 @@ class MyDrawerState extends State<MyDrawer> {
               Navigator.pushNamed(context, '/list_nations');
             },
           ),
-          ListTile(
-              leading: const Icon(Icons.logout),
-              title: Text(AppLocalizations.of(context)!.drawerLogout),
-              onTap: ()  {
-                // set up the buttons
-                Widget cancelButton = TextButton(
-                  child: Text("Cancel"),
-                  onPressed:  () {
-                    Navigator.pop(context);
-                    Navigator.pop(context);
-                  },
-                );
-                Widget continueButton = TextButton(
-                  child: Text("Continue"),
-                  onPressed:  () async {
-                    setState(() {
-                      _isSigningOut = true;
-                    });
-                    await Authentication.signOut(context: context);
-                    setState(() {
-                      _isSigningOut = false;
-                    });
-                    Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(builder: (BuildContext context) => Login()),
-                        ModalRoute.withName('/')
-                    );
-                  },
-                );
-                // set up the AlertDialog
-                AlertDialog alert = AlertDialog(
-                  title: Text("Conferma"),
-                  content: Text("Confermi uscita dall'applicazione ?"),
-                  actions: [
-                    cancelButton,
-                    continueButton,
-                  ],
-                );
-                // show the dialog
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return alert;
-                  },
-                );
-              }),
+          Helper.logoff(context),
         ],
       ),
     );
-
   }
 }

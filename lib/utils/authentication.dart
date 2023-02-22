@@ -1,6 +1,4 @@
 import 'dart:async';
-
-import 'package:extension_google_sign_in_as_googleapis_auth/extension_google_sign_in_as_googleapis_auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
@@ -57,10 +55,11 @@ class Authentication {
       );
       if (googleSignIn != null) {
         final GoogleSignInAccount? googleSignInAccount = await googleSignIn.signIn();
-        final authClient = await googleSignIn.authenticatedClient();
-        if (googleSignInAccount != null && authClient != null) {
+        //final authClient = await googleSignIn.authenticatedClient();
+        //if (googleSignInAccount != null && authClient != null) {
+        if (googleSignInAccount != null) {
           Helper.googleSignIn = googleSignIn;
-          Helper.authClient = authClient;
+          //Helper.authClient = authClient;
           final GoogleSignInAuthentication googleSignInAuthentication =
           await googleSignInAccount.authentication;
           final AuthCredential credential = GoogleAuthProvider.credential(

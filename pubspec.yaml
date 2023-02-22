@@ -12,42 +12,42 @@ dependencies:
   flutter_localizations:
     sdk: flutter
 
-  cloud_firestore: ^4.3.2
-  cupertino_icons: ^1.0.2
-  extension_google_sign_in_as_googleapis_auth: ^2.0.7
-  firebase_analytics: ^10.1.0
-  firebase_auth: ^4.2.5
-  firebase_core: ^2.4.1
-  firebase_crashlytics: ^3.0.12
-  flutter_secure_storage: ^7.0.1
+  cloud_firestore: ^4.4.3
+  cupertino_icons: ^1.0.5
+  firebase_analytics: ^10.1.4
+  firebase_auth: ^4.2.9
+  firebase_core: ^2.7.0
+  firebase_crashlytics: ^3.0.15
+  flutter_secure_storage: ^8.0.0
   flutter_signin_button: ^2.0.0
   get: ^4.6.5
-  google_fonts: ^4.0.1
-  google_sign_in: ^5.4.4
-  googleapis: ^10.0.0
+  google_fonts: ^4.0.3
+  google_sign_in: ^6.0.0
+  google_sign_in_web: ^0.11.0
+  googleapis: ^10.1.0
   http: ^0.13.5
   intl: ^0.17.0
   open_file: ^3.2.1
-  syncfusion_flutter_barcodes: ^20.4.49
-  syncfusion_flutter_calendar: ^20.4.49
-  syncfusion_flutter_charts: ^20.4.49
-  syncfusion_flutter_core: ^20.4.49
-  syncfusion_flutter_datagrid: ^20.4.49
-  syncfusion_flutter_datagrid_export: ^20.4.49-beta
-  syncfusion_flutter_datepicker: ^20.4.49
-  syncfusion_flutter_gauges: ^20.4.49
-  syncfusion_flutter_maps: ^20.4.49
+  syncfusion_flutter_barcodes: ^20.4.51
+  syncfusion_flutter_calendar: ^20.4.51
+  syncfusion_flutter_charts: ^20.4.51
+  syncfusion_flutter_core: ^20.4.51
+  syncfusion_flutter_datagrid: ^20.4.51
+  syncfusion_flutter_datagrid_export: ^20.4.51-beta
+  syncfusion_flutter_datepicker: ^20.4.51
+  syncfusion_flutter_gauges: ^20.4.51
+  syncfusion_flutter_maps: ^20.4.51
   syncfusion_flutter_pdf: ^20.4.49
-  syncfusion_flutter_pdfviewer: ^20.4.49
-  syncfusion_flutter_signaturepad: ^20.4.49
-  syncfusion_flutter_sliders: ^20.4.49
-  syncfusion_flutter_treemap: ^20.4.49-beta
-  syncfusion_flutter_xlsio: ^20.4.49-beta
-  syncfusion_localizations: ^20.4.49
-  syncfusion_officechart: ^20.4.49-beta
-  syncfusion_officecore: ^20.4.49-beta
-  transparent_image: ^2.0.0
-  url_launcher: ^6.1.8
+  syncfusion_flutter_pdfviewer: ^20.4.51
+  syncfusion_flutter_signaturepad: ^20.4.51
+  syncfusion_flutter_sliders: ^20.4.51
+  syncfusion_flutter_treemap: ^20.4.51-beta
+  syncfusion_flutter_xlsio: ^20.4.51-beta
+  syncfusion_localizations: ^20.4.51
+  syncfusion_officechart: ^20.4.51-beta
+  syncfusion_officecore: ^20.4.51-beta
+  transparent_image: ^2.0.1
+  url_launcher: ^6.1.9
 
 dev_dependencies:
   flutter_test:
@@ -60,7 +60,8 @@ flutter:
   assets:
     - assets/logos/logo-cpgev.png
     - assets/images/bosco_autunnale.jpg
-
+    - assets/icons/excel_icon.png
+    - assets/icons/adobe_icon.png
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg

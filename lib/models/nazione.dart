@@ -1,3 +1,7 @@
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:syncfusion_flutter_datagrid/datagrid.dart';
+
 class Nazione {
   final String area;
   final String capital;
@@ -13,7 +17,7 @@ class Nazione {
   final String population;
   final String tld;
 
-  Nazione({
+  Nazione(Object? data, {
     required this.area,
     required this.capital,
     required this.continent,
@@ -60,7 +64,7 @@ class Nazione {
     'tld'           : tld,
   };
 }
-/**
+
 class NazioneDataSource extends DataGridSource {
   NazioneDataSource(this._nazioni) { buildDataRow(); }
 
@@ -70,20 +74,20 @@ class NazioneDataSource extends DataGridSource {
   void buildDataRow() {
     dataGridRows = _nazioni
         .map<DataGridRow>((e) => DataGridRow(cells: [
-          DataGridCell<String>(columnName: 'area',          value: e.area),
-          DataGridCell<String>(columnName: 'capital',       value: e.capital),
-          DataGridCell<String>(columnName: 'continent',     value: e.continent),
-          DataGridCell<String>(columnName: 'country',       value: e.country),
-          DataGridCell<String>(columnName: 'currencyCode',  value: e.currencyCode),
-          DataGridCell<String>(columnName: 'currencyName',  value: e.currencyName),
-          DataGridCell<String>(columnName: 'fips',          value: e.fips),
-          DataGridCell<String>(columnName: 'iso',           value: e.iso),
-          DataGridCell<String>(columnName: 'iso3',          value: e.iso3),
-          DataGridCell<String>(columnName: 'isoNumeric',    value: e.isoNumeric),
-          DataGridCell<String>(columnName: 'phone',         value: e.phone),
-          DataGridCell<String>(columnName: 'population',    value: e.population),
-          DataGridCell<String>(columnName: 'tld',           value: e.tld),
-        ]))
+      DataGridCell<String>(columnName: 'area',          value: e.area),
+      DataGridCell<String>(columnName: 'capital',       value: e.capital),
+      DataGridCell<String>(columnName: 'continent',     value: e.continent),
+      DataGridCell<String>(columnName: 'country',       value: e.country),
+      DataGridCell<String>(columnName: 'currencyCode',  value: e.currencyCode),
+      DataGridCell<String>(columnName: 'currencyName',  value: e.currencyName),
+      DataGridCell<String>(columnName: 'fips',          value: e.fips),
+      DataGridCell<String>(columnName: 'iso',           value: e.iso),
+      DataGridCell<String>(columnName: 'iso3',          value: e.iso3),
+      DataGridCell<String>(columnName: 'isoNumeric',    value: e.isoNumeric),
+      DataGridCell<String>(columnName: 'phone',         value: e.phone),
+      DataGridCell<String>(columnName: 'population',    value: e.population),
+      DataGridCell<String>(columnName: 'tld',           value: e.tld),
+    ]))
         .toList();
   }
 
@@ -116,9 +120,9 @@ class NazioneDataSource extends DataGridSource {
             alignment: aDestra.contains(e.columnName) ? Alignment.centerRight : Alignment.centerLeft,
             padding: const EdgeInsets.all(8.0),
             child: numerics.contains(e.columnName) ?
-              Text(formatter.format(n))
+            Text(formatter.format(n))
                 :
-              Text(e.value.toString()),
+            Text(e.value.toString()),
           );
         }).toList());
   }
@@ -127,4 +131,22 @@ class NazioneDataSource extends DataGridSource {
     notifyListeners();
   }
 }
-**/
+
+class CustomColumnSizer extends ColumnSizer {
+  @override
+  double computeCellWidth(GridColumn column, DataGridRow row, Object? cellValue, TextStyle textStyle) {
+    var numerics = ["area","isoNumeric", "population"];
+    var n = 0;
+    try {
+      n = int.parse(cellValue.toString());
+    } catch(e) {
+      n = 0;
+    }
+    if (numerics.contains(column.columnName)) {
+      var formatter = NumberFormat.decimalPattern('it_IT');
+      cellValue = formatter.format(n);
+    }
+
+    return super.computeCellWidth(column, row, cellValue, textStyle);
+  }
+}

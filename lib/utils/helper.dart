@@ -12,6 +12,8 @@ import 'package:syncfusion_flutter_xlsio/xlsio.dart' as sio;
 import 'package:gesvol/helper/save_file_mobile.dart'
 if (dart.library.html) 'package:gesvol/helper/save_file_web.dart' as saver;
 
+import '../screen/my_drawer.dart';
+
 class Helper {
   // globals objects
   static User? userFirebase;
@@ -20,6 +22,23 @@ class Helper {
   static var authClient;
 
   Helper._();
+
+  static Widget doBuild(BuildContext context, String title, Widget theWidget) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(title),
+        actions: [
+          IconButton(
+              onPressed: ()  {
+                Helper.logoff(context);
+              },
+              icon: const Icon(Icons.power_settings_new))
+        ],
+      ),
+      drawer: const MyDrawer(),
+      body: theWidget,
+    );
+  }
 
   static Widget getRibbon(BuildContext context, GlobalKey<SfDataGridState> key) {
     return Row(

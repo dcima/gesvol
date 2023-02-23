@@ -67,7 +67,13 @@ class MyDrawerState extends State<MyDrawer> {
               Navigator.pushNamed(context, '/list_nations');
             },
           ),
-          Helper.logoff(context),
+          ListTile(
+            leading: const Icon(Icons.domain),
+            title: Text(AppLocalizations.of(context)!.drawerLogout),
+            onTap: () {
+              Helper.logoff(context);
+            },
+          ),
         ],
       ),
     );

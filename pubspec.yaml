@@ -60,6 +60,7 @@ flutter:
   assets:
     - assets/logos/logo-cpgev.png
     - assets/images/bosco_autunnale.jpg
+    - assets/images/nav-menu-header-bg.jpg
     - assets/icons/excel_icon.png
     - assets/icons/adobe_icon.png
   # To add assets to your application, add an assets section, like this:

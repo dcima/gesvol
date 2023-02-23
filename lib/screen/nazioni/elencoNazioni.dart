@@ -6,11 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
-import 'package:syncfusion_flutter_datagrid_export/export.dart';
-import 'package:syncfusion_flutter_pdf/pdf.dart';
-import 'package:syncfusion_flutter_xlsio/xlsio.dart' hide Column;
-
-
 
 class ElencoNazioni extends StatefulWidget {
   const ElencoNazioni({Key? key}) : super(key: key);
@@ -34,22 +29,6 @@ class _ElencoNazioniState extends State<ElencoNazioni> {
     super.initState();
     _streamNazioni = _refNazioni.snapshots();
   }
-
-/*
-  Future<void> _exportDataGridToExcel() async {
-    final Workbook workbook = keySfDataGrid.currentState!.exportToExcelWorkbook();
-    final List<int> bytes = workbook.saveAsStream();
-    workbook.dispose();
-    await helper.saveAndLaunchFile(bytes, 'DataGrid.xlsx');
-  }
-
-  Future<void> _exportDataGridToPdf() async {
-    final PdfDocument document = keySfDataGrid.currentState!.exportToPdfDocument(fitAllColumnsInOnePage: true);
-    final List<int> bytes = document.saveSync();
-    await helper.saveAndLaunchFile(bytes, 'DataGrid.pdf');
-    document.dispose();
-  }
-*/
 
   Widget _buildDataGrid(context) {
     return  StreamBuilder<QuerySnapshot>(
@@ -181,29 +160,40 @@ class _ElencoNazioniState extends State<ElencoNazioni> {
     );
   }
 
+  Widget getBody(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children:  <Widget> [
+        Helper.getRibbon(context, keySfDataGrid),
+        Expanded(
+          child: _buildDataGrid(context),
+        ),
+      ],
+    );
+  }
+
+  @override Widget build(BuildContext context) {
+    return Helper.doBuild(context, "Dashboard", getBody(context));
+  }
+
+/*
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.drawerListNations),
-        actions: [
-          IconButton(
-              onPressed: ()  {
-                Helper.logoff(context);
-              },
-              icon: const Icon(Icons.power_settings_new))
-        ],
       ),
       drawer: const MyDrawer(),
       body: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children:  <Widget> [
-            Helper.getRibbon(context, keySfDataGrid),
-            Expanded(
-                child: _buildDataGrid(context),
-            ),
-          ],
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children:  <Widget> [
+          Helper.getRibbon(context, keySfDataGrid),
+          Expanded(
+            child: _buildDataGrid(context),
+          ),
+        ],
       ),
     );
   }
+*/
 }

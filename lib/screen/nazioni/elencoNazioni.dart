@@ -1,9 +1,7 @@
 import '../../models/nazione.dart';
 import '../../utils/helper.dart';
-import '../my_drawer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
@@ -148,7 +146,6 @@ class _ElencoNazioniState extends State<ElencoNazioni> {
               isScrollbarAlwaysShown: true,
               key: keySfDataGrid,
               onQueryRowHeight: (details) {
-                // Set the row height as 70.0 to the column header row.
                 return details.rowIndex == 0 ? 70.0 : 49.0;
               },
               source: _nazioneDataSource,
@@ -175,25 +172,4 @@ class _ElencoNazioniState extends State<ElencoNazioni> {
   @override Widget build(BuildContext context) {
     return Helper.doBuild(context, "Dashboard", getBody(context));
   }
-
-/*
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.drawerListNations),
-      ),
-      drawer: const MyDrawer(),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children:  <Widget> [
-          Helper.getRibbon(context, keySfDataGrid),
-          Expanded(
-            child: _buildDataGrid(context),
-          ),
-        ],
-      ),
-    );
-  }
-*/
 }

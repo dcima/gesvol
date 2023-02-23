@@ -51,6 +51,7 @@ class Authentication {
         hostedDomain: 'gevbologna.org',
         scopes: <String>[
           'https://www.googleapis.com/auth/youtube.readonly',
+          'https://www.googleapis.com/auth/admin.directory.group.readonly'
         ],
       );
       if (googleSignIn != null) {

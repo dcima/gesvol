@@ -2,6 +2,7 @@
     "@@locale": "fr",
     "appTitle": "Secrétariat CPGEV",
     "drawerAbout": "Sur",
+    "drawerListMyGroups": "Énumérez mes groupes",
     "drawerListMyVideos": "Lister mes vidéos",
     "drawerListNations": "Liste des nations",
     "drawerLogout": "Se déconnecter",

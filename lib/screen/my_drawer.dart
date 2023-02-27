@@ -41,7 +41,7 @@ class MyDrawerState extends State<MyDrawer> {
             ),
           ),
           ListTile(
-            leading: const Icon(Icons.home),
+            leading: const Icon(Icons.dashboard),
             title: Text(AppLocalizations.of(context)!.drawerDashboard),
             onTap: () {
               if( ModalRoute.of(context)?.settings.name == '/dashboard') {
@@ -52,7 +52,18 @@ class MyDrawerState extends State<MyDrawer> {
             },
           ),
           ListTile(
-            leading: const Icon(Icons.domain),
+            leading: const Icon(Icons.groups),
+            title: Text(AppLocalizations.of(context)!.drawerListMyGroups),
+            onTap: () {
+              if( ModalRoute.of(context)?.settings.name == '/list_my_groups') {
+                Navigator.pop(context);
+              } else {
+                Navigator.pushNamed(context, '/list_my_groups');
+              }
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.video_library),
             title: Text(AppLocalizations.of(context)!.drawerListMyVideos),
             onTap: () {
               if( ModalRoute.of(context)?.settings.name == '/list_my_videos') {
@@ -63,7 +74,7 @@ class MyDrawerState extends State<MyDrawer> {
             },
           ),
           ListTile(
-            leading: const Icon(Icons.domain),
+            leading: const Icon(Icons.flag),
             title: Text(AppLocalizations.of(context)!.drawerListNations),
             onTap: () {
               if( ModalRoute.of(context)?.settings.name == '/list_nations') {
@@ -74,7 +85,7 @@ class MyDrawerState extends State<MyDrawer> {
             },
           ),
           ListTile(
-            leading: const Icon(Icons.domain),
+            leading: const Icon(Icons.logout),
             title: Text(AppLocalizations.of(context)!.drawerLogout),
             onTap: () {
               Helper.logoff(context);

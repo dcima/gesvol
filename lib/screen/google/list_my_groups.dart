@@ -1,10 +1,8 @@
-import 'package:intl/intl.dart';
-
 import '../../utils/helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:gesvol/screen/my_drawer.dart';
-
+import 'package:googleapis/admin/directory_v1.dart';
 
 class ListMyGroups extends StatefulWidget {
   const ListMyGroups({super.key});
@@ -14,49 +12,43 @@ class ListMyGroups extends StatefulWidget {
 }
 
 class ListMyGroupsState extends State<ListMyGroups> {
-  Future<PlaylistListResponse> getGroups() async {
-    final youTubeApi = YouTubeApi(Helper.authClient);
-    final response = await youTubeApi.playlists.list(
-      ["snippet"],
-      mine: true,
-      maxResults: 25,
+  Future<Groups> getGroups() async {
+    final groupsApi = GroupsResource(Helper.authClient);
+    final response = await groupsApi.list(
+      domain: 'gevbologna.org',
+      maxResults: 500,
+      userKey: Helper.userGoogle?.uid
     );
+    print('Future<Groups> getGroups() async');
+    print(response);
+
     return response;
   }
 
   @override
   Widget build(BuildContext context) {
+    print('ListMyGroupsState build');
     return Scaffold(
         appBar: AppBar(
           title: Text(AppLocalizations.of(context)!.drawerListMyGroups),
         ),
         drawer: const MyDrawer(),
-        body: FutureBuilder<PlaylistListResponse>(
+        body: FutureBuilder<Groups>(
             future: getGroups(),
-            builder: (context, AsyncSnapshot<PlaylistListResponse> snapshot) {
+            builder: (context, AsyncSnapshot<Groups> snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const CircularProgressIndicator();
               } else if (snapshot.connectionState == ConnectionState.done) {
                 if (snapshot.hasError) {
                   return const Text('Error');
                 } else if (snapshot.hasData) {
-                  List<Playlist> playList = snapshot.data!.items!;
+                  List<Groups> groupList = snapshot.data! as List<Groups>;
                   return ListView(
-                    children: playList.map((e){
+                    children: groupList.map((e){
                       return Column(
                         children: [
                           Text(e.etag!),
-                          Text(e.id!),
-                          Text(e.kind!),
-                          Text(e.snippet!.title!),
-                          Text(e.snippet!.channelTitle!),
-                          Text(e.snippet!.channelId!),
-                          Text(e.snippet!.defaultLanguage!),
-                          Text(e.snippet!.description!),
-                          Text(DateFormat('dd/MM/YYYY hh:mm:ss').format(e.snippet!.publishedAt!)),
-                          Text(e.snippet!.tags! as String),
-                          Text(e.snippet!.thumbnails!.default_! as String),
-                          Text(e.snippet!.thumbnailVideoId!),
+                          Text(e.groups?.length as String),
                         ],
                       );
                     }).toList(),

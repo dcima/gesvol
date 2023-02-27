@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:extension_google_sign_in_as_googleapis_auth/extension_google_sign_in_as_googleapis_auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
@@ -6,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:gesvol/utils/firebase_options.dart';
 import 'package:gesvol/utils/helper.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:googleapis_auth/googleapis_auth.dart';
 
 class Authentication {
   static Future<FirebaseApp> initializeFirebase({required BuildContext context}) async {
@@ -21,12 +23,15 @@ class Authentication {
     FirebaseAuth auth = FirebaseAuth.instance;
     User? user;
 
-/*    if (kIsWeb) {
+    if (kIsWeb) {
       print('>>>>>>>>>>>>>>>>>>> kIsWeb <<<<<<<<<<<<<<<<<<');
       GoogleAuthProvider authProvider = GoogleAuthProvider();
       authProvider.addScope('https://www.googleapis.com/auth/userinfo.email');
       authProvider.addScope('https://www.googleapis.com/auth/userinfo.profile');
       authProvider.addScope('https://www.googleapis.com/auth/youtube.readonly');
+      authProvider.addScope('https://www.googleapis.com/auth/admin.directory.group');
+      authProvider.addScope('https://www.googleapis.com/auth/admin.directory.group.member');
+
       authProvider.setCustomParameters({
         'client_id': '158895990793-4lseu4mff4bcnaeja3oiod850incvno3.apps.googleusercontent.com',
         'hd': 'gevbologna.org',
@@ -45,58 +50,64 @@ class Authentication {
       } catch (e) {
         print(e.toString());
       }
-    } else {*/
+    } else {
       final GoogleSignIn googleSignIn = GoogleSignIn(
         clientId: '158895990793-4lseu4mff4bcnaeja3oiod850incvno3.apps.googleusercontent.com',
         hostedDomain: 'gevbologna.org',
         scopes: <String>[
+          'https://www.googleapis.com/auth/userinfo.email',
+          'https://www.googleapis.com/auth/userinfo.profile',
           'https://www.googleapis.com/auth/youtube.readonly',
-          'https://www.googleapis.com/auth/admin.directory.group.readonly'
+          'https://www.googleapis.com/auth/admin.directory.group',
+          'https://www.googleapis.com/auth/admin.directory.group.member'
         ],
       );
       if (googleSignIn != null) {
+        Helper.googleSignIn = googleSignIn;
         final GoogleSignInAccount? googleSignInAccount = await googleSignIn.signIn();
-        //final authClient = await googleSignIn.authenticatedClient();
-        //if (googleSignInAccount != null && authClient != null) {
-        if (googleSignInAccount != null) {
-          Helper.googleSignIn = googleSignIn;
-          //Helper.authClient = authClient;
-          final GoogleSignInAuthentication googleSignInAuthentication =
-          await googleSignInAccount.authentication;
-          final AuthCredential credential = GoogleAuthProvider.credential(
-            accessToken: googleSignInAuthentication.accessToken,
-            idToken: googleSignInAuthentication.idToken,
-          );
-          try {
-            final UserCredential userCredential = await auth
-                .signInWithCredential(credential);
-            user = userCredential.user;
-          } on FirebaseAuthException catch (e) {
-            if (e.code == 'account-exists-with-different-credential') {
+        Helper.authClient  = await googleSignIn.authenticatedClient();
+
+        print(Helper.googleSignIn?.currentUser?.authHeaders);
+        print(Helper.authClient.toString());
+
+        if (googleSignInAccount != null && Helper.authClient  != null) {
+          if (googleSignInAccount != null) {
+            final GoogleSignInAuthentication googleSignInAuthentication = await googleSignInAccount.authentication;
+            final AuthCredential credential = GoogleAuthProvider.credential(
+              accessToken: googleSignInAuthentication.accessToken,
+              idToken: googleSignInAuthentication.idToken,
+            );
+            try {
+              final UserCredential userCredential = await auth
+                  .signInWithCredential(credential);
+              user = userCredential.user;
+            } on FirebaseAuthException catch (e) {
+              if (e.code == 'account-exists-with-different-credential') {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  Authentication.customSnackBar(
+                    content:
+                    'The account already exists with a different credential.',
+                  ),
+                );
+              } else if (e.code == 'invalid-credential') {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  Authentication.customSnackBar(
+                    content:
+                    'Error occurred while accessing credentials. Try again.',
+                  ),
+                );
+              }
+            } catch (e) {
               ScaffoldMessenger.of(context).showSnackBar(
                 Authentication.customSnackBar(
-                  content:
-                  'The account already exists with a different credential.',
-                ),
-              );
-            } else if (e.code == 'invalid-credential') {
-              ScaffoldMessenger.of(context).showSnackBar(
-                Authentication.customSnackBar(
-                  content:
-                  'Error occurred while accessing credentials. Try again.',
+                  content: 'Error occurred using Google Sign-In. Try again.',
                 ),
               );
             }
-          } catch (e) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              Authentication.customSnackBar(
-                content: 'Error occurred using Google Sign-In. Try again.',
-              ),
-            );
           }
         }
       }
-    //}
+    }
 
     Helper.userGoogle = user;
 

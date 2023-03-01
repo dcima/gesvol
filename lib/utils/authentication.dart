@@ -7,7 +7,10 @@ import 'package:flutter/material.dart';
 import 'package:gesvol/utils/firebase_options.dart';
 import 'package:gesvol/utils/helper.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+<<<<<<< HEAD
 import 'package:googleapis_auth/googleapis_auth.dart';
+=======
+>>>>>>> a359410 (22)
 
 class Authentication {
   static Future<FirebaseApp> initializeFirebase({required BuildContext context}) async {
@@ -22,7 +25,11 @@ class Authentication {
   static Future<User?> signInWithGoogle({required BuildContext context}) async {
     FirebaseAuth auth = FirebaseAuth.instance;
     User? user;
+<<<<<<< HEAD
 
+=======
+/**
+>>>>>>> a359410 (22)
     if (kIsWeb) {
       print('>>>>>>>>>>>>>>>>>>> kIsWeb <<<<<<<<<<<<<<<<<<');
       GoogleAuthProvider authProvider = GoogleAuthProvider();
@@ -50,7 +57,11 @@ class Authentication {
       } catch (e) {
         print(e.toString());
       }
+<<<<<<< HEAD
     } else {
+=======
+    } else {**/
+>>>>>>> a359410 (22)
       final GoogleSignIn googleSignIn = GoogleSignIn(
         clientId: '158895990793-4lseu4mff4bcnaeja3oiod850incvno3.apps.googleusercontent.com',
         hostedDomain: 'gevbologna.org',
@@ -62,10 +73,18 @@ class Authentication {
           'https://www.googleapis.com/auth/admin.directory.group.member'
         ],
       );
+<<<<<<< HEAD
       if (googleSignIn != null) {
         Helper.googleSignIn = googleSignIn;
         final GoogleSignInAccount? googleSignInAccount = await googleSignIn.signIn();
         Helper.authClient  = await googleSignIn.authenticatedClient();
+=======
+    /**
+      if (googleSignIn != null) {
+        Helper.googleSignIn = googleSignIn;
+        final GoogleSignInAccount? googleSignInAccount = await googleSignIn.signIn();
+        Helper.authClient = googleSignInAccount?.authHeaders;
+>>>>>>> a359410 (22)
 
         print(Helper.googleSignIn?.currentUser?.authHeaders);
         print(Helper.authClient.toString());
@@ -107,7 +126,18 @@ class Authentication {
           }
         }
       }
+<<<<<<< HEAD
     }
+=======
+      **/
+      if (googleSignIn != null) {
+        googleSignIn.onCurrentUserChanged.listen((GoogleSignInAccount? account) {
+          Helper.googleSignIn = googleSignIn;
+          googleSignIn.signInSilently();
+        }
+      }
+   // }
+>>>>>>> a359410 (22)
 
     Helper.userGoogle = user;
 

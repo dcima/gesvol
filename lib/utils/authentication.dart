@@ -131,15 +131,16 @@ class Authentication {
 =======
       **/
       if (googleSignIn != null) {
-        googleSignIn.onCurrentUserChanged.listen((GoogleSignInAccount? account) {
+        final GoogleSignInAccount? account = await googleSignIn.signIn();
+        googleSignIn.onCurrentUserChanged.listen((GoogleSignInAccount? account) async {
           Helper.googleSignIn = googleSignIn;
+          Helper.userGoogle = account;
+          Helper.authClient = (await googleSignIn.authenticatedClient())!;
           googleSignIn.signInSilently();
-        }
+        });
       }
    // }
 >>>>>>> a359410 (22)
-
-    Helper.userGoogle = user;
 
     return user;
   }

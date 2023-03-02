@@ -1,9 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import '../screen/login.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../screen/login.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:googleapis_auth/googleapis_auth.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:syncfusion_flutter_datagrid_export/export.dart';
 import 'package:syncfusion_flutter_pdf/pdf.dart';
@@ -19,7 +18,7 @@ import '../screen/my_drawer.dart';
 class Helper {
   // globals objects
   static User? userFirebase;
-  static User? userGoogle;
+  static GoogleSignInAccount? userGoogle;
   static GoogleSignIn? googleSignIn;
   static var authClient;
 
@@ -208,8 +207,7 @@ class Helper {
             child: Wrap(children: [
               Text(
                 message ?? 'boh?',
-                style:
-                GoogleFonts.robotoCondensed().copyWith(color: Colors.white),
+                style: GoogleFonts.robotoCondensed().copyWith(color: Colors.white),
               )
             ]));
       },

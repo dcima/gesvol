@@ -11,23 +11,21 @@ class MyDrawer extends StatefulWidget {
 }
 
 class MyDrawerState extends State<MyDrawer> {
-  final User? _user = Helper.userGoogle;
-
   @override
   Widget build(BuildContext context) {
     return  Drawer(
       child: ListView(
         children:   [
           UserAccountsDrawerHeader(
-            accountName: Text(_user!.displayName!),
-            accountEmail: Text(_user!.email!),
+            accountName: Text(Helper.userGoogle!.displayName!),
+            accountEmail: Text(Helper.userGoogle!.email!),
             onDetailsPressed: () {
-              print(Helper.userGoogle?.uid);
-              Helper.snackBarPop(context, Helper.userGoogle?.uid);
+              print(Helper.userGoogle?.id);
+              Helper.snackBarPop(context, Helper.userGoogle?.id);
             },
             currentAccountPicture: CircleAvatar(
               radius: 30.0,
-              backgroundImage: NetworkImage(_user!.photoURL!),
+              backgroundImage: NetworkImage(Helper.userGoogle!.photoUrl!),
               backgroundColor: Colors.transparent,
               onBackgroundImageError: (e, s) {
                 debugPrint('image issue, $e,$s');
@@ -48,6 +46,17 @@ class MyDrawerState extends State<MyDrawer> {
                 Navigator.pop(context);
               } else {
                 Navigator.pushNamed(context, '/dashboard');
+              }
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.contacts),
+            title: Text(AppLocalizations.of(context)!.drawerListMyContacts),
+            onTap: () {
+              if( ModalRoute.of(context)?.settings.name == '/list_my_contacts') {
+                Navigator.pop(context);
+              } else {
+                Navigator.pushNamed(context, '/list_my_contacts');
               }
             },
           ),

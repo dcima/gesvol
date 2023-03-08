@@ -8,6 +8,8 @@ import 'package:gesvol/screen/dashboard.dart';
 import 'package:gesvol/utils/authentication.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../utils/helper.dart';
+
 class Login extends StatefulWidget {
   const Login({super.key});
 
@@ -161,12 +163,12 @@ class _GoogleSignInButtonState extends State<GoogleSignInButton> {
                   setState(() {
                     _isSigningIn = true;
                   });
-                  User? user =  await Authentication.signInWithGoogle(context: context);
+                  await Authentication.signInWithGoogle(context: context);
                   setState(() {
                     _isSigningIn = false;
                   });
 
-                  if (user != null) {
+                  if (Helper.userGoogle  != null) {
                     Navigator.of(context).pushReplacement(
                       MaterialPageRoute(
                         builder: (context) => const Dashboard(),

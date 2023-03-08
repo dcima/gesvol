@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:gesvol/screen/dashboard.dart';
+import 'package:gesvol/screen/google/list_my_contacts.dart';
 import 'package:gesvol/screen/google/list_my_groups.dart';
 import 'package:gesvol/screen/google/list_my_videos.dart';
 import 'package:gesvol/screen/login.dart';
@@ -45,6 +46,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/'                       : (context) => const Login(),
         '/dashboard'              : (context) => const Dashboard(),
+        '/list_my_contacts'       : (context) => const ListMyContacts(),
         '/list_my_groups'         : (context) => const ListMyGroups(),
         '/list_my_videos'         : (context) => const ListMyVideos(),
         '/list_nations'           : (context) => const ElencoNazioni(),

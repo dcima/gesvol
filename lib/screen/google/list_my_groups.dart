@@ -17,7 +17,7 @@ class ListMyGroupsState extends State<ListMyGroups> {
     final response = await groupsApi.list(
       domain: 'gevbologna.org',
       maxResults: 500,
-      userKey: Helper.userGoogle?.uid
+      userKey: Helper.userGoogle?.id
     );
     print('Future<Groups> getGroups() async');
     print(response);

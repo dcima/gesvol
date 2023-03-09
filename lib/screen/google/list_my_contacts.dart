@@ -43,9 +43,15 @@ class ListMyContactsState extends State<ListMyContacts> {
     );
 
     final String? firstNamedContactName = _pickFirstNamedContact(response.connections);
-    var  s;
+    String  s = '';
     response.connections!.forEach((e) {
-      s = s + e.emailAddresses?[0].displayName + "<>" + e.names?[0].displayName + "\n";
+      if( e.emailAddresses != null ) {
+        s += e.emailAddresses![0].displayName! + '<>';
+      }
+      if( e.names != null ){
+        s += e.names![0].displayName! + '<br>';
+      }
+      print(s);
     });
 
     setState(() {

@@ -7,22 +7,19 @@ import 'package:flutter/material.dart';
 import 'package:gesvol/utils/firebase_options.dart';
 import 'package:gesvol/utils/helper.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:googleapis_auth/googleapis_auth.dart' as auth show AuthClient;
+import 'package:googleapis/admin/directory_v1.dart';
 
 class Authentication {
   static Future<FirebaseApp> initializeFirebase({required BuildContext context}) async {
+    print('initializeFirebase');
     FirebaseApp firebaseApp = await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
-    User? user = FirebaseAuth.instance.currentUser;
-    Helper.userFirebase = user;
+    Helper.userFirebase = FirebaseAuth.instance.currentUser;
     return firebaseApp;
   }
 
-  static Future<void> signInWithGoogle({required BuildContext context}) async {
-    FirebaseAuth auth = FirebaseAuth.instance;
-    final GoogleSignInAccount? account;
-
+  static Future<UserCredential> signInWithGoogle({required BuildContext context}) async {
     final GoogleSignIn googleSignIn = GoogleSignIn(
       clientId: '158895990793-4lseu4mff4bcnaeja3oiod850incvno3.apps.googleusercontent.com',
       hostedDomain: 'gevbologna.org',
@@ -31,17 +28,23 @@ class Authentication {
         'https://www.googleapis.com/auth/userinfo.profile',
         'https://www.googleapis.com/auth/youtube.readonly',
         'https://www.googleapis.com/auth/admin.directory.group',
-        'https://www.googleapis.com/auth/admin.directory.group.member'
+        'https://www.googleapis.com/auth/admin.directory.group.member',
+        DirectoryApi.adminDirectoryGroupMemberScope,
+        DirectoryApi.adminDirectoryGroupMemberReadonlyScope,
       ],
     );
 
-    if (googleSignIn != null) {
-      account = await googleSignIn.signIn();
-      print(account);
-      Helper.googleSignIn = googleSignIn;
-      Helper.userGoogle = account;
-      Helper.authClient = (await googleSignIn.authenticatedClient())!;
-    }
+    Helper.userGoogle = await googleSignIn.signIn();
+    Helper.googleAuth = await Helper.userGoogle?.authentication;
+    Helper.httpClient =  (await googleSignIn.authenticatedClient())!;
+
+    final credential = GoogleAuthProvider.credential(
+      accessToken: Helper.googleAuth?.accessToken,
+      idToken: Helper.googleAuth?.idToken,
+    );
+
+    return await FirebaseAuth.instance.signInWithCredential(credential);
+
   }
 
   static SnackBar customSnackBar({required String content}) {

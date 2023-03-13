@@ -1,12 +1,11 @@
+// ignore_for_file: prefer_interpolation_to_compose_strings
+
 import '../../utils/helper.dart';
-import 'package:extension_google_sign_in_as_googleapis_auth/extension_google_sign_in_as_googleapis_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:gesvol/screen/my_drawer.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:googleapis/people/v1.dart';
-import 'package:googleapis_auth/googleapis_auth.dart' as auth show AuthClient;
 
 class ListMyContacts extends StatefulWidget {
   const ListMyContacts({super.key});
@@ -30,11 +29,11 @@ class ListMyContactsState extends State<ListMyContacts> {
     setState(() {
       _contactText = 'Loading contact info...';
     });
-    final auth.AuthClient? client = await Helper.googleSignIn?.authenticatedClient();
-    assert(client != null, 'Authenticated client missing!');
+
+    assert(Helper.httpClient != null, 'Authenticated client missing!');
 
     // Prepare a People Service authenticated client.
-    final PeopleServiceApi peopleApi = PeopleServiceApi(client!);
+    final PeopleServiceApi peopleApi = PeopleServiceApi(Helper.httpClient !);
     // Retrieve a list of the `names` of my `connections`
     final ListConnectionsResponse response =
     await peopleApi.people.connections.list(
@@ -42,7 +41,6 @@ class ListMyContactsState extends State<ListMyContacts> {
       personFields: 'names',
     );
 
-    final String? firstNamedContactName = _pickFirstNamedContact(response.connections);
     String  s = '';
     response.connections!.forEach((e) {
       if( e.emailAddresses != null ) {
@@ -61,18 +59,6 @@ class ListMyContactsState extends State<ListMyContacts> {
         _contactText = 'No contacts to display.';
       }
     });
-  }
-
-  String? _pickFirstNamedContact(List<Person>? connections) {
-    return connections
-        ?.firstWhere(
-          (Person person) => person.names != null,
-    )
-        .names
-        ?.firstWhere(
-          (Name name) => name.displayName != null,
-    )
-        .displayName;
   }
 
   Widget _buildBody() {
@@ -96,7 +82,6 @@ class ListMyContactsState extends State<ListMyContacts> {
 
   @override
   Widget build(BuildContext context) {
-    print('ListMyContactsState build');
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.drawerListMyContacts),

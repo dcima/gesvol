@@ -15,10 +15,7 @@ class ListMyVideos extends StatefulWidget {
 
 class ListMyVideosState extends State<ListMyVideos> {
   Future<PlaylistListResponse> getVideos() async {
-    print('Future<PlaylistListResponse> getVideos() async ');
-    print(Helper.authClient);
-
-    final youTubeApi = YouTubeApi(Helper.authClient);
+    final youTubeApi = YouTubeApi(Helper.httpClient);
     final response = await youTubeApi.playlists.list(
       ["snippet"],
       mine: true,

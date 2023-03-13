@@ -20,7 +20,8 @@ class Helper {
   static User? userFirebase;
   static GoogleSignInAccount? userGoogle;
   static GoogleSignIn? googleSignIn;
-  static var authClient;
+  static GoogleSignInAuthentication? googleAuth;
+  static var httpClient;
 
   Helper._();
 

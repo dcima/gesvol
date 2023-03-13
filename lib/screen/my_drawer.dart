@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:gesvol/utils/helper.dart';
@@ -18,7 +17,7 @@ class MyDrawerState extends State<MyDrawer> {
         children:   [
           UserAccountsDrawerHeader(
             accountName: Text(Helper.userGoogle!.displayName!),
-            accountEmail: Text(Helper.userGoogle!.email!),
+            accountEmail: Text(Helper.userGoogle!.email),
             onDetailsPressed: () {
               print(Helper.userGoogle?.id);
               Helper.snackBarPop(context, Helper.userGoogle?.id);
